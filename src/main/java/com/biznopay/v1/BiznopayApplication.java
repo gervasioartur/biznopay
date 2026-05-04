@@ -1,4 +1,4 @@
-package com.biznopay.biznopay;
+package com.biznopay.v1;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
