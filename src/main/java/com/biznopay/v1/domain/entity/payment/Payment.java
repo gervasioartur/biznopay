@@ -3,7 +3,6 @@ package com.biznopay.v1.domain.entity.payment;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
 import com.biznopay.v1.domain.enums.PaymentStatus;
 import com.biznopay.v1.domain.exception.InvalidAmountException;
-import com.biznopay.v1.domain.exception.InvalidFieldException;
 import com.biznopay.v1.domain.exception.MissingRequiredFieldException;
 
 import java.time.LocalDateTime;

@@ -28,7 +28,7 @@ public class PaymentTest {
     }
 
     @ParameterizedTest
-    @ValueSource(longs = {-1L,0L,99L,7_500_001L} )
+    @ValueSource(longs = {-1L, 0L, 99L, 7_500_001L})
     public void ShouldThrowInvalidAmountExceptionWhenAmountInCentsIsLessThanZeroOrLesThanMinValueOrGreaterThanMaxValue(Long amountInCents) {
         Assertions.assertThrows(InvalidAmountException.class, () -> Payment.create(PaymentMocks.paymentMock().getIdempotencyKey(),
                 amountInCents, PaymentMocks.paymentMock().getDescription(), PaymentMocks.paymentMock().getPaymentMethodDetails()));
