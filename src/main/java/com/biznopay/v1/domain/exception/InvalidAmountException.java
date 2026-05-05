@@ -1,7 +1,5 @@
 package com.biznopay.v1.domain.exception;
 
-import com.biznopay.v1.domain.entity.payment.Payment;
-
 public class InvalidAmountException extends RuntimeException {
     private final String CODE = "INVALID_AMOUNT";
 

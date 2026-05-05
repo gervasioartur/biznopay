@@ -14,5 +14,6 @@ public abstract class PaymentMethodDetails {
     }
 
     public abstract Long getMinAmountInCents();
+
     public abstract Long getMaxAmountInCents();
 }

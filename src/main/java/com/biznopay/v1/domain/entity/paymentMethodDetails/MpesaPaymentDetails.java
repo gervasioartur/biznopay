@@ -24,6 +24,7 @@ public class MpesaPaymentDetails extends PaymentMethodDetails {
     public Long getMinAmountInCents() {
         return MIN_AMOUNT_IN_CENTS;
     }
+
     @Override
     public Long getMaxAmountInCents() {
         return MAX_AMOUNT_IN_CENTS;
