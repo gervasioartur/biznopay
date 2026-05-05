@@ -93,4 +93,13 @@ public class PaymentTest {
         payment = payment.markAsFailed(reason);
         Assertions.assertEquals(PaymentStatus.FAILED, payment.getStatus());
     }
+
+    @Test
+    public void ShouldIncrementRetryCount(){
+        Payment payment = Payment.create(PaymentMocks.paymentMock().getIdempotencyKey(),
+                PaymentMocks.paymentMock().getAmountInCents(), PaymentMocks.paymentMock().getDescription(),
+                PaymentMocks.paymentMock().getPaymentMethodDetails());
+        payment = payment.incrementRetry();
+        Assertions.assertEquals(1, payment.getRetryCount());
+    }
 }
