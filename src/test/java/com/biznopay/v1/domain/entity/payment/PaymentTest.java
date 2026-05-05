@@ -44,7 +44,7 @@ public class PaymentTest {
     }
 
     @Test
-    public void ShouldCreatePaymentWithCorrectValues(){
+    public void ShouldCreatePaymentWithCorrectValues() {
         Payment payment = Payment.create(PaymentMocks.paymentMock().getIdempotencyKey(),
                 PaymentMocks.paymentMock().getAmountInCents(), PaymentMocks.paymentMock().getDescription(),
                 PaymentMocks.paymentMock().getPaymentMethodDetails());
