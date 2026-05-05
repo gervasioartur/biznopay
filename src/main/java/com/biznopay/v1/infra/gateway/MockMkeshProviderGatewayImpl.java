@@ -6,6 +6,6 @@ import com.biznopay.v1.domain.gateway.PaymentProviderGateway;
 public class MockMkeshProviderGatewayImpl implements PaymentProviderGateway {
     @Override
     public String submit(Payment payment) {
-        return "";
+        throw new RuntimeException("mpesa gateway unavailable - attempt ");
     }
 }
