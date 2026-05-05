@@ -13,13 +13,13 @@ public class Mocks {
 
     public static Payment maximumRetriesPaymentMock() {
         Payment payment = pendingPaymentMock();
-        for(int i = 0 ; i <= 2; i++) payment = payment.incrementRetry();
+        for (int i = 0; i <= 2; i++) payment = payment.incrementRetry();
         return payment;
     }
 
     public static Payment completedPaymentMock() {
-        Payment payment =  pendingPaymentMock();
-        payment =  payment.markAsCompleted("any_provider_payment_id");
+        Payment payment = pendingPaymentMock();
+        payment = payment.markAsCompleted("any_provider_payment_id");
         return payment;
     }
 
