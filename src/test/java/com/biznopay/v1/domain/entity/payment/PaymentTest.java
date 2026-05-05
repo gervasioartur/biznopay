@@ -3,6 +3,7 @@ package com.biznopay.v1.domain.entity.payment;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
 import com.biznopay.v1.domain.enums.PaymentStatus;
 import com.biznopay.v1.domain.exception.InvalidAmountException;
+import com.biznopay.v1.domain.exception.InvalidFieldException;
 import com.biznopay.v1.domain.exception.MissingRequiredFieldException;
 import com.biznopay.v1.mocks.Mocks;
 import org.junit.jupiter.api.Assertions;
@@ -13,8 +14,19 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 @SpringBootTest
 public class PaymentTest {
+
+    @Test
+    public void ShouldThrowInvalidFieldExceptionWhenIdIsNull() {
+        Payment payment = Mocks.pendingPaymentMock();
+        Assertions.assertThrows(InvalidFieldException.class, () -> Payment.with(null, "", 0L,
+                "", "", PaymentStatus.PENDING, payment.getPaymentMethodDetails(), Optional.empty(),
+                Optional.empty(), 0, LocalDateTime.now(), LocalDateTime.now()));
+    }
 
     @ParameterizedTest
     @NullAndEmptySource
