@@ -1,6 +1,7 @@
 package com.biznopay.v1.domain.entity.paymentMethodDetails;
 
 import com.biznopay.v1.domain.enums.PaymentMethodType;
+import com.biznopay.v1.domain.exception.MissingRequiredFieldException;
 
 public class MpesaPaymentDetails extends PaymentMethodDetails {
     private static final Long MIN_AMOUNT_IN_CENTS = 100L;
@@ -9,12 +10,21 @@ public class MpesaPaymentDetails extends PaymentMethodDetails {
 
     private MpesaPaymentDetails(String phoneNumber) {
         super(PaymentMethodType.MPESA);
-        this.phoneNumber = phoneNumber;
+        this.phoneNumber = this.validatePhoneNumber(phoneNumber);
     }
 
     public static MpesaPaymentDetails create(String phoneNumber) {
         return new MpesaPaymentDetails(phoneNumber);
     }
+
+    //VALIDATIONS
+    private String validatePhoneNumber(String phoneNumber) {
+        if (phoneNumber == null || phoneNumber.isEmpty())
+            throw new MissingRequiredFieldException("Phone number", "MpesaPaymentDetails");
+        return phoneNumber;
+    }
+
+    //END VALIDATIONS
 
     public String getPhoneNumber() {
         return phoneNumber;
