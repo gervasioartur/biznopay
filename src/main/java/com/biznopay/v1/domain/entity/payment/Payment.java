@@ -53,7 +53,8 @@ public class Payment {
                                PaymentStatus status, PaymentMethodDetails paymentMethodDetails, Optional<String> providerPaymentId,
                                Optional<String> failureReason, int retryCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         PaymentId id = new PaymentId(uuid);
-        return new Payment(id, idempotencyKey, amountInCents, currency, description, status, paymentMethodDetails, providerPaymentId, failureReason, retryCount, createdAt, updatedAt);
+        return new Payment(id, idempotencyKey, amountInCents, currency, description, status, paymentMethodDetails,
+                providerPaymentId, failureReason, retryCount, createdAt, updatedAt);
     }
 
     //VALIDATIONS
