@@ -51,7 +51,7 @@ public class Payment {
 
     public static Payment with(UUID uuid, String idempotencyKey, Long amountInCents, String currency, String description,
                                PaymentStatus status, PaymentMethodDetails paymentMethodDetails, Optional<String> providerPaymentId,
-                               Optional<String> failureReason, int retryCount, LocalDateTime createdAt, LocalDateTime updatedAt){
+                               Optional<String> failureReason, int retryCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         PaymentId id = new PaymentId(uuid);
         return new Payment(id, idempotencyKey, amountInCents, currency, description, status, paymentMethodDetails, providerPaymentId, failureReason, retryCount, createdAt, updatedAt);
     }
