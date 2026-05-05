@@ -2,6 +2,7 @@ package com.biznopay.v1.infra.mapper;
 
 import com.biznopay.v1.domain.entity.payment.Payment;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.EmolaPaymentDetails;
+import com.biznopay.v1.domain.entity.paymentMethodDetails.MkeshPaymentDetails;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.MpesaPaymentDetails;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
 import com.biznopay.v1.domain.enums.PaymentMethodType;
@@ -23,14 +24,12 @@ public class PaymentMapper {
                 paymentJpaEntity.getCreatedAt(), paymentJpaEntity.getUpdatedAt());
     }
 
-    public static PaymentMethodDetails getDomainPaymentMethodType(PaymentMethodType type, String phoneNumber) {
-        if (type == PaymentMethodType.MPESA)
-            return MpesaPaymentDetails.create(phoneNumber);
-        if (type == PaymentMethodType.EMOLA)
-            return EmolaPaymentDetails.create(phoneNumber);
-        if (type == PaymentMethodType.MKESH)
-            return MpesaPaymentDetails.create(phoneNumber);
-        return null;
+    private static PaymentMethodDetails getDomainPaymentMethodType(PaymentMethodType type, String phoneNumber) {
+        return switch (type) {
+            case MPESA -> MpesaPaymentDetails.create(phoneNumber);
+            case MKESH -> MkeshPaymentDetails.create(phoneNumber);
+            case EMOLA -> EmolaPaymentDetails.create(phoneNumber);
+        };
     }
 
     public static PaymentMethodDetailsJpaEntity getJpaPaymentMethodType(PaymentMethodType type, String phoneNumber) {

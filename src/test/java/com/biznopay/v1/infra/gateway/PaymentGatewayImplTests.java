@@ -26,7 +26,7 @@ public class PaymentGatewayImplTests {
 
     @Test
     public void ShouldReturnPaymentIfExistsOnFindByIdempotencyKey() {
-        PaymentJpaEntity paymentJpaEntity = PaymentMapper.toJpaEntity(Mocks.completedPaymentMock());
+        PaymentJpaEntity paymentJpaEntity = PaymentMapper.toJpaEntity(Mocks.completedMpesaPaymentMock());
         String idempotencyKey = paymentJpaEntity.getIdempotencyKey();
         Mockito.when(this.paymentJpaRepository.findByIdempotencyKey(idempotencyKey)).thenReturn(Optional.of(paymentJpaEntity));
         PaymentGateway paymentGateway =  this.setUp();
@@ -48,7 +48,7 @@ public class PaymentGatewayImplTests {
 
     @Test
     public void ShouldSavedPaymentAndReturnSavedPaymentOnSave() {
-        Payment payment = Mocks.completedPaymentMock();
+        Payment payment = Mocks.completedMpesaPaymentMock();
         PaymentJpaEntity paymentJpaEntity = PaymentMapper.toJpaEntity(payment);
         Mockito.when(this.paymentJpaRepository.save(Mockito.any())).thenReturn(paymentJpaEntity);
         PaymentGateway paymentGateway =  this.setUp();

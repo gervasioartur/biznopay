@@ -12,20 +12,20 @@ public class MockMpesaProviderGatewayImplTests {
 
     @Test
     public void ShouldThrowExceptionOnFirstAttempt() {
-        Payment payment = Mocks.pendingPaymentMock();
+        Payment payment = Mocks.pendingMpesaPaymentMock();
         Assertions.assertThrows(RuntimeException.class, () -> gateway.submit(payment));
     }
 
     @Test
     public void ShouldThrowExceptionOnSecondAttempt() {
-        Payment payment = Mocks.pendingPaymentMock();
+        Payment payment = Mocks.pendingMpesaPaymentMock();
         Assertions.assertThrows(RuntimeException.class, () -> gateway.submit(payment));
         Assertions.assertThrows(RuntimeException.class, () -> gateway.submit(payment));
     }
 
     @Test
     public void ShouldReturnProviderPaymentIdOnThirdAttempt() {
-        Payment payment = Mocks.pendingPaymentMock();
+        Payment payment = Mocks.pendingMpesaPaymentMock();
         Assertions.assertThrows(RuntimeException.class, () -> gateway.submit(payment));
         Assertions.assertThrows(RuntimeException.class, () -> gateway.submit(payment));
         String providerPaymentId = gateway.submit(payment);
@@ -35,7 +35,7 @@ public class MockMpesaProviderGatewayImplTests {
 
     @Test
     public void ShouldResetAfterSuccess() {
-        Payment payment = Mocks.pendingPaymentMock();
+        Payment payment = Mocks.pendingMpesaPaymentMock();
         Assertions.assertThrows(RuntimeException.class, () -> gateway.submit(payment));
         Assertions.assertThrows(RuntimeException.class, () -> gateway.submit(payment));
         gateway.submit(payment);

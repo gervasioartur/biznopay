@@ -11,7 +11,7 @@ public class MockEmolaProviderGatewayImplTests {
 
     @Test
     public void ShouldReturnProviderPaymentIdOnSubmitSuccess() {
-        Payment payment = Mocks.processingPaymentMock();
+        Payment payment = Mocks.processingMpesaPaymentMock();
         String providerPaymentId = new MockEmolaProviderGatewayImpl().submit(payment);
         Assertions.assertNotNull(providerPaymentId);
     }
