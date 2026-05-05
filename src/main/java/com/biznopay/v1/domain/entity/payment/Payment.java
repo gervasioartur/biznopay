@@ -2,11 +2,13 @@ package com.biznopay.v1.domain.entity.payment;
 
 import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
 import com.biznopay.v1.domain.enums.PaymentStatus;
+import com.biznopay.v1.domain.exception.MissingRequiredFieldException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class Payment {
+    public static final String ENTITY_NAME = "Payment";
 
     private final PaymentId id;
     private final String idempotencyKey;
@@ -25,7 +27,7 @@ public class Payment {
                     PaymentStatus status, PaymentMethodDetails paymentMethodDetails, Optional<String> providerPaymentId,
                     Optional<String> failureReason, int retryCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.idempotencyKey = idempotencyKey;
+        this.idempotencyKey = this.validateIdempotencyKey(idempotencyKey);
         this.amountInCents = amountInCents;
         this.currency = currency;
         this.description = description;
@@ -44,6 +46,15 @@ public class Payment {
                 paymentMethodDetails, Optional.empty(), Optional.empty(), 0, now, now
         );
     }
+
+    //VALIDATIONS
+    private String validateIdempotencyKey(String idempotencyKey){
+        if (idempotencyKey == null || idempotencyKey.isBlank())
+            throw new MissingRequiredFieldException("idempotencyKey",ENTITY_NAME);
+        return idempotencyKey;
+    }
+
+    //END VALIDATIONS
 
     public Payment markAsProcessing() {
         return new Payment(id, idempotencyKey, amountInCents, currency, description,
