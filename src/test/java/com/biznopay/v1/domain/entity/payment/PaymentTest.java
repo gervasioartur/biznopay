@@ -1,5 +1,6 @@
 package com.biznopay.v1.domain.entity.payment;
 
+import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
 import com.biznopay.v1.domain.exception.InvalidAmountException;
 import com.biznopay.v1.domain.exception.MissingRequiredFieldException;
 import com.biznopay.v1.mocks.PaymentMocks;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -32,5 +34,12 @@ public class PaymentTest {
     public void ShouldThrowInvalidAmountExceptionWhenAmountInCentsIsLessThanZeroOrLesThanMinValueOrGreaterThanMaxValue(Long amountInCents) {
         Assertions.assertThrows(InvalidAmountException.class, () -> Payment.create(PaymentMocks.paymentMock().getIdempotencyKey(),
                 amountInCents, PaymentMocks.paymentMock().getDescription(), PaymentMocks.paymentMock().getPaymentMethodDetails()));
+    }
+
+    @ParameterizedTest
+    @NullSource
+    public void ShouldThrowMissingRequiredFieldExceptionWhenPaymentMethodDetailsIsNull(PaymentMethodDetails paymentMethodDetails) {
+        Assertions.assertThrows(MissingRequiredFieldException.class, () -> Payment.create(PaymentMocks.paymentMock().getIdempotencyKey(),
+                PaymentMocks.paymentMock().getAmountInCents(), PaymentMocks.paymentMock().getDescription(), paymentMethodDetails));
     }
 }
