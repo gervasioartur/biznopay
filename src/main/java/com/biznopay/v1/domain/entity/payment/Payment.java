@@ -28,7 +28,7 @@ public class Payment {
                     Optional<String> failureReason, int retryCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.idempotencyKey = this.validateIdempotencyKey(idempotencyKey);
-        this.amountInCents = amountInCents;
+        this.amountInCents = this.validateAmountInCents(amountInCents);
         this.currency = currency;
         this.description = description;
         this.status = status;
@@ -52,6 +52,12 @@ public class Payment {
         if (idempotencyKey == null || idempotencyKey.isBlank())
             throw new MissingRequiredFieldException("idempotencyKey", ENTITY_NAME);
         return idempotencyKey;
+    }
+
+    public Long validateAmountInCents(Long amountInCents) {
+        if (amountInCents == null)
+            throw new MissingRequiredFieldException("amountInCents", ENTITY_NAME);
+        return amountInCents;
     }
 
     //END VALIDATIONS
