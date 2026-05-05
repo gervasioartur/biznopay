@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class MockEmolaProviderGatewayImplTests {
 
     @Test
-    public  void ShouldReturnProviderPaymentIdOnSubmitSuccess(){
+    public void ShouldReturnProviderPaymentIdOnSubmitSuccess() {
         Payment payment = Mocks.processingPaymentMock();
         String providerPaymentId = new MockEmolaProviderGatewayImpl().submit(payment);
         Assertions.assertNotNull(providerPaymentId);

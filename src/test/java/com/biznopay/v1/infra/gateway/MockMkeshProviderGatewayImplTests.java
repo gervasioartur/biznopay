@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class MockMkeshProviderGatewayImplTests {
 
     @Test
-    public void ShouldThrowRuntimeExceptionOnSubmitFailure(){
+    public void ShouldThrowRuntimeExceptionOnSubmitFailure() {
         Payment payment = Mocks.processingPaymentMock();
         MockMkeshProviderGatewayImpl gateway = new MockMkeshProviderGatewayImpl();
         assertThrows(RuntimeException.class, () -> gateway.submit(payment));

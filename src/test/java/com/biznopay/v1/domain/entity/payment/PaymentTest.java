@@ -78,7 +78,7 @@ public class PaymentTest {
     }
 
     @Test
-    public void ShouldBuildPaymentWithCorrectValues(){
+    public void ShouldBuildPaymentWithCorrectValues() {
         Payment payment = Mocks.pendingPaymentMock();
         LocalDateTime createdAtAndUpdatedAt = Mocks.FIXED_DATE_TIME;
         payment = Payment.with(payment.getId().value(), payment.getIdempotencyKey(), payment.getAmountInCents(),
