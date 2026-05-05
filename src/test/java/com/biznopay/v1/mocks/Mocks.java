@@ -11,6 +11,11 @@ public class Mocks {
         return Payment.create("any_idempotency_key", 100L, "any_description", paymentMethodDetails);
     }
 
+    public static Payment pendingPaymentMock(CreatePaymentInput input) {
+        PaymentMethodDetails paymentMethodDetails = MpesaPaymentDetails.create("847272727");
+        return Payment.create(input.idempotencyKey(), input.amountInCents(), input.description(), paymentMethodDetails);
+    }
+
     public static Payment maximumRetriesPaymentMock() {
         Payment payment = pendingPaymentMock();
         for (int i = 0; i <= 2; i++) payment = payment.incrementRetry();
@@ -30,6 +35,6 @@ public class Mocks {
     }
 
     public static CreatePaymentInput createPaymentInputMock() {
-        return new CreatePaymentInput("any_idempotency_key", 100L, "any_description", "any_phone_number");
+        return new CreatePaymentInput("any_idempotency_key", 100L, "any_description", "847272727");
     }
 }
