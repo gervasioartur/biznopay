@@ -11,7 +11,7 @@ Feature: Create payment
       | idempotency-key | 123abc    |
     And the payment gateway is permanently unavailable
     And the system retries processing the payment up to maximum attempts
-    Then the system should return status code 200
+    Then the system should return status code 503
     And the payment status should be "FAILED"
     And the response should contain error code "PAYMENT_FAILED"
     And the error severity should be "CRITICAL"
