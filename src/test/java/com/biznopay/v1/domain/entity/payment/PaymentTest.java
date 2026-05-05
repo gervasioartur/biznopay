@@ -42,4 +42,24 @@ public class PaymentTest {
         Assertions.assertThrows(MissingRequiredFieldException.class, () -> Payment.create(PaymentMocks.paymentMock().getIdempotencyKey(),
                 PaymentMocks.paymentMock().getAmountInCents(), PaymentMocks.paymentMock().getDescription(), paymentMethodDetails));
     }
+
+    @Test
+    public void ShouldCreatePaymentWithCorrectValues(){
+        Payment payment = Payment.create(PaymentMocks.paymentMock().getIdempotencyKey(),
+                PaymentMocks.paymentMock().getAmountInCents(), PaymentMocks.paymentMock().getDescription(),
+                PaymentMocks.paymentMock().getPaymentMethodDetails());
+
+        Assertions.assertNotNull(payment.getId());
+        Assertions.assertEquals(PaymentMocks.paymentMock().getIdempotencyKey(), payment.getIdempotencyKey());
+        Assertions.assertEquals(PaymentMocks.paymentMock().getAmountInCents(), payment.getAmountInCents());
+        Assertions.assertEquals(PaymentMocks.paymentMock().getCurrency(), payment.getCurrency());
+        Assertions.assertEquals(PaymentMocks.paymentMock().getDescription(), payment.getDescription());
+        Assertions.assertEquals(PaymentMocks.paymentMock().getStatus(), payment.getStatus());
+        Assertions.assertEquals(PaymentMocks.paymentMock().getPaymentMethodDetails().getType(), payment.getPaymentMethodDetails().getType());
+        Assertions.assertEquals(PaymentMocks.paymentMock().getPaymentMethodDetails().getMinAmountInCents(), payment.getPaymentMethodDetails().getMinAmountInCents());
+        Assertions.assertEquals(PaymentMocks.paymentMock().getPaymentMethodDetails().getMaxAmountInCents(), payment.getPaymentMethodDetails().getMaxAmountInCents());
+        Assertions.assertEquals(PaymentMocks.paymentMock().getProviderPaymentId(), payment.getProviderPaymentId());
+        Assertions.assertEquals(PaymentMocks.paymentMock().getFailureReason(), payment.getFailureReason());
+        Assertions.assertEquals(PaymentMocks.paymentMock().getRetryCount(), payment.getRetryCount());
+    }
 }
