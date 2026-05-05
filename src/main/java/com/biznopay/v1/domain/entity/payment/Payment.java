@@ -47,7 +47,6 @@ public class Payment {
                 paymentMethodDetails, Optional.empty(), Optional.empty(), 0, now, now
         );
     }
-
     //VALIDATIONS
     private String validateIdempotencyKey(String idempotencyKey) {
         if (idempotencyKey == null || idempotencyKey.isBlank())
@@ -70,7 +69,6 @@ public class Payment {
             throw new MissingRequiredFieldException("paymentMethodDetails", ENTITY_NAME);
         return paymentMethodDetails;
     }
-
     //END VALIDATIONS
 
     public Payment markAsProcessing() {

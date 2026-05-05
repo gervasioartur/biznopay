@@ -61,5 +61,6 @@ public class PaymentTest {
         Assertions.assertEquals(PaymentMocks.paymentMock().getProviderPaymentId(), payment.getProviderPaymentId());
         Assertions.assertEquals(PaymentMocks.paymentMock().getFailureReason(), payment.getFailureReason());
         Assertions.assertEquals(PaymentMocks.paymentMock().getRetryCount(), payment.getRetryCount());
+        Assertions.assertEquals(PaymentMocks.paymentMock().canRetry(), payment.canRetry());
     }
 }
