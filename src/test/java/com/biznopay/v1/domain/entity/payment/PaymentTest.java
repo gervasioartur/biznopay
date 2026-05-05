@@ -75,7 +75,7 @@ public class PaymentTest {
     }
 
     @Test
-    public void ShouldMarkPaymentAsCompleted(){
+    public void ShouldMarkPaymentAsCompleted() {
         Payment payment = Payment.create(DomainEntityMocks.paymentMock().getIdempotencyKey(),
                 DomainEntityMocks.paymentMock().getAmountInCents(), DomainEntityMocks.paymentMock().getDescription(),
                 DomainEntityMocks.paymentMock().getPaymentMethodDetails());
@@ -85,7 +85,7 @@ public class PaymentTest {
     }
 
     @Test
-    public void ShouldMarkPaymentAsFailed(){
+    public void ShouldMarkPaymentAsFailed() {
         Payment payment = Payment.create(DomainEntityMocks.paymentMock().getIdempotencyKey(),
                 DomainEntityMocks.paymentMock().getAmountInCents(), DomainEntityMocks.paymentMock().getDescription(),
                 DomainEntityMocks.paymentMock().getPaymentMethodDetails());
@@ -95,7 +95,7 @@ public class PaymentTest {
     }
 
     @Test
-    public void ShouldIncrementRetryCount(){
+    public void ShouldIncrementRetryCount() {
         Payment payment = Payment.create(DomainEntityMocks.paymentMock().getIdempotencyKey(),
                 DomainEntityMocks.paymentMock().getAmountInCents(), DomainEntityMocks.paymentMock().getDescription(),
                 DomainEntityMocks.paymentMock().getPaymentMethodDetails());

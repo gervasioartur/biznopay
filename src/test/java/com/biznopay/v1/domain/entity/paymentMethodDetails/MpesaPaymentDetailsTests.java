@@ -19,7 +19,7 @@ public class MpesaPaymentDetailsTests {
 
     @ParameterizedTest
     @ValueSource(strings = {"any_phone_number", "876965252"})
-    public void ShouldThrownInvalidFieldExceptionWhenPhoneNumberIsInvalid(String phoneNumber){
+    public void ShouldThrownInvalidFieldExceptionWhenPhoneNumberIsInvalid(String phoneNumber) {
         Assertions.assertThrows(InvalidFieldException.class, () -> MpesaPaymentDetails.create(phoneNumber));
     }
 }

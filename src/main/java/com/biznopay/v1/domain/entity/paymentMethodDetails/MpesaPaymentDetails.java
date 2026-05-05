@@ -23,7 +23,7 @@ public class MpesaPaymentDetails extends PaymentMethodDetails {
         if (phoneNumber == null || phoneNumber.isBlank())
             throw new MissingRequiredFieldException("M-Pesa Phone number", "MpesaPaymentDetails");
         if (!phoneNumber.matches("^(84|85)\\d{7}$"))
-            throw new InvalidFieldException("M-Pesa phone number","MpesaPaymentDetails");
+            throw new InvalidFieldException("M-Pesa phone number", "MpesaPaymentDetails");
         return phoneNumber;
     }
     //END VALIDATIONS
