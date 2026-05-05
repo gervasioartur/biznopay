@@ -1,7 +1,5 @@
 package com.biznopay.v1.domain.entity.payment;
 
-import com.biznopay.v1.domain.entity.paymentMethodDetails.MpesaPaymentDetails;
-import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
 import com.biznopay.v1.domain.exception.MissingRequiredFieldException;
 import com.biznopay.v1.mocks.PaymentMocks;
 import org.junit.jupiter.api.Assertions;
