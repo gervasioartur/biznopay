@@ -16,5 +16,10 @@ public class MockMpesaProviderGatewayImplTests {
         Assertions.assertThrows(RuntimeException.class, () -> gateway.submit(payment));
     }
 
-
+    @Test
+    public void ShouldThrowExceptionOnSecondAttempt() {
+        Payment payment = Mocks.pendingPaymentMock();
+        Assertions.assertThrows(RuntimeException.class, () -> gateway.submit(payment));
+        Assertions.assertThrows(RuntimeException.class, () -> gateway.submit(payment));
+    }
 }
