@@ -69,6 +69,17 @@ Feature: Create payment
     And the error severity should be "LOW"
     And the response should contain error message "amount must be greater than zero"
 
+  Scenario: Payment creation fails when amount is less than mim amount limit
+    When the user sends a POST request to "/api/v1/payments" with:
+      | amount          | 99        |
+      | description     | Bill      |
+      | phone_number    | 841234567 |
+      | idempotency-key | 123abc    |
+    Then the system should return status code 422
+    And the response should contain error code "INVALID_AMOUNT"
+    And the error severity should be "LOW"
+    And the response should contain error message "amount less than the  mim allowed"
+
   Scenario: Payment creation fails when amount exceeds maximum limit
     When the user sends a POST request to "/api/v1/payments" with:
       | amount          | 99999999  |
