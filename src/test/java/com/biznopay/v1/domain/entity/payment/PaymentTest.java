@@ -78,6 +78,28 @@ public class PaymentTest {
     }
 
     @Test
+    public void ShouldBuildPaymentWithCorrectValues(){
+        Payment payment = Mocks.pendingPaymentMock();
+        payment = Payment.with(payment.getId().value(), payment.getIdempotencyKey(), payment.getAmountInCents(),
+                payment.getCurrency(), payment.getDescription(), payment.getStatus(), payment.getPaymentMethodDetails(), Optional.empty(),
+                Optional.empty(), 0, LocalDateTime.now(), LocalDateTime.now());
+
+        Assertions.assertNotNull(payment.getId());
+        Assertions.assertEquals(Mocks.pendingPaymentMock().getIdempotencyKey(), payment.getIdempotencyKey());
+        Assertions.assertEquals(Mocks.pendingPaymentMock().getAmountInCents(), payment.getAmountInCents());
+        Assertions.assertEquals(Mocks.pendingPaymentMock().getCurrency(), payment.getCurrency());
+        Assertions.assertEquals(Mocks.pendingPaymentMock().getDescription(), payment.getDescription());
+        Assertions.assertEquals(Mocks.pendingPaymentMock().getStatus(), payment.getStatus());
+        Assertions.assertEquals(Mocks.pendingPaymentMock().getPaymentMethodDetails().getType(), payment.getPaymentMethodDetails().getType());
+        Assertions.assertEquals(Mocks.pendingPaymentMock().getPaymentMethodDetails().getMinAmountInCents(), payment.getPaymentMethodDetails().getMinAmountInCents());
+        Assertions.assertEquals(Mocks.pendingPaymentMock().getPaymentMethodDetails().getMaxAmountInCents(), payment.getPaymentMethodDetails().getMaxAmountInCents());
+        Assertions.assertEquals(Mocks.pendingPaymentMock().getProviderPaymentId(), payment.getProviderPaymentId());
+        Assertions.assertEquals(Mocks.pendingPaymentMock().getFailureReason(), payment.getFailureReason());
+        Assertions.assertEquals(Mocks.pendingPaymentMock().getRetryCount(), payment.getRetryCount());
+        Assertions.assertEquals(Mocks.pendingPaymentMock().canRetry(), payment.canRetry());
+    }
+
+    @Test
     public void ShouldMarkPaymentAsProcessing() {
         Payment payment = Payment.create(Mocks.pendingPaymentMock().getIdempotencyKey(),
                 Mocks.pendingPaymentMock().getAmountInCents(), Mocks.pendingPaymentMock().getDescription(),
