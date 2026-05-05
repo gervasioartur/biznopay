@@ -23,6 +23,12 @@ public class Mocks {
         return payment;
     }
 
+    public static Payment failedPaymentMock() {
+        Payment payment = pendingPaymentMock();
+        payment = payment.markAsFailed("any_reason");
+        return payment;
+    }
+
     public static CreatePaymentInput createPaymentInputMock() {
         return new CreatePaymentInput("any_idempotency_key", 100L, "any_description", "any_phone_number");
     }
