@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface PaymentRepository {
     Optional<Payment> findByIdempotencyKey(String idempotencyKey);
+    Payment save(Payment payment);
 }
