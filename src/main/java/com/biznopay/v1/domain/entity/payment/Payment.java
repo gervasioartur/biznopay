@@ -72,30 +72,26 @@ public class Payment {
     //END VALIDATIONS
 
     public Payment markAsProcessing() {
-        return new Payment(id, idempotencyKey, amountInCents, currency, description,
-                PaymentStatus.PROCESSING,
+        return new Payment(id, idempotencyKey, amountInCents, currency, description, PaymentStatus.PROCESSING,
                 paymentMethodDetails, providerPaymentId, failureReason,
                 retryCount, createdAt, LocalDateTime.now());
     }
 
     public Payment markAsCompleted(String providerPaymentId) {
-        return new Payment(id, idempotencyKey, amountInCents, currency, description,
-                PaymentStatus.COMPLETED,
+        return new Payment(id, idempotencyKey, amountInCents, currency, description, PaymentStatus.COMPLETED,
                 paymentMethodDetails, Optional.of(providerPaymentId), Optional.empty(),
                 retryCount, createdAt, LocalDateTime.now());
     }
 
     public Payment markAsFailed(String reason) {
         return new Payment(id, idempotencyKey, amountInCents, currency, description,
-                PaymentStatus.FAILED,
-                paymentMethodDetails, providerPaymentId, Optional.of(reason),
+                PaymentStatus.FAILED, paymentMethodDetails, providerPaymentId, Optional.of(reason),
                 retryCount, createdAt, LocalDateTime.now());
     }
 
     public Payment incrementRetry() {
         return new Payment(id, idempotencyKey, amountInCents, currency, description,
-                status,
-                paymentMethodDetails, providerPaymentId, failureReason,
+                status, paymentMethodDetails, providerPaymentId, failureReason,
                 retryCount + 1, createdAt, LocalDateTime.now());
     }
 
