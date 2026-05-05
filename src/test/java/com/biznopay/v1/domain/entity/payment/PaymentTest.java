@@ -66,7 +66,7 @@ public class PaymentTest {
     }
 
     @Test
-    public  void ShouldMarkPaymentAsProcessing(){
+    public void ShouldMarkPaymentAsProcessing() {
         Payment payment = Payment.create(PaymentMocks.paymentMock().getIdempotencyKey(),
                 PaymentMocks.paymentMock().getAmountInCents(), PaymentMocks.paymentMock().getDescription(),
                 PaymentMocks.paymentMock().getPaymentMethodDetails());

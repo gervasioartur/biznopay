@@ -47,6 +47,7 @@ public class Payment {
                 paymentMethodDetails, Optional.empty(), Optional.empty(), 0, now, now
         );
     }
+
     //VALIDATIONS
     private String validateIdempotencyKey(String idempotencyKey) {
         if (idempotencyKey == null || idempotencyKey.isBlank())
