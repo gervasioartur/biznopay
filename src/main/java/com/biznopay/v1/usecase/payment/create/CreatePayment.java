@@ -5,8 +5,8 @@ import com.biznopay.v1.domain.entity.paymentMethodDetails.MpesaPaymentDetails;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
 import com.biznopay.v1.domain.enums.PaymentStatus;
 import com.biznopay.v1.domain.exception.ServiceUnavailableException;
+import com.biznopay.v1.domain.gateway.PaymentProviderGateway;
 import com.biznopay.v1.domain.repository.PaymentRepository;
-import com.biznopay.v1.gateway.PaymentProviderGateway;
 
 public class CreatePayment {
 
