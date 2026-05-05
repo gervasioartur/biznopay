@@ -19,7 +19,7 @@ public class CreatePayment {
     }
 
     public CreatePaymentOutput execute(CreatePaymentInput input) {
-        Payment  payment = this.paymentRepository
+        Payment payment = this.paymentRepository
                 .findByIdempotencyKey(input.idempotencyKey())
                 .orElse(createAndPersisPayment(input));
 
@@ -32,10 +32,10 @@ public class CreatePayment {
         return processWithRetry(payment);
     }
 
-    private Payment createAndPersisPayment(CreatePaymentInput input){
+    private Payment createAndPersisPayment(CreatePaymentInput input) {
         PaymentMethodDetails paymentMethodDetails = MpesaPaymentDetails.create(input.phoneNumber());
-        Payment payment = Payment.create(input.idempotencyKey(), input.amountInCents(), input.description(),paymentMethodDetails);
-        return  paymentRepository.save(payment);
+        Payment payment = Payment.create(input.idempotencyKey(), input.amountInCents(), input.description(), paymentMethodDetails);
+        return paymentRepository.save(payment);
     }
 
     private CreatePaymentOutput processWithRetry(Payment payment) {
@@ -53,7 +53,7 @@ public class CreatePayment {
                 return new CreatePaymentOutput(providerPaymentId);
 
             } catch (Exception e) {
-                errorMessage =  e.getMessage();
+                errorMessage = e.getMessage();
                 payment = payment.incrementRetry();
                 paymentRepository.save(payment);
             }
