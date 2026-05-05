@@ -33,5 +33,12 @@ public class MockMpesaProviderGatewayImplTests {
         Assertions.assertFalse(providerPaymentId.isBlank());
     }
 
-
+    @Test
+    public void ShouldResetAfterSuccess() {
+        Payment payment = Mocks.pendingPaymentMock();
+        Assertions.assertThrows(RuntimeException.class, () -> gateway.submit(payment));
+        Assertions.assertThrows(RuntimeException.class, () -> gateway.submit(payment));
+        gateway.submit(payment);
+        Assertions.assertThrows(RuntimeException.class, () -> gateway.submit(payment));
+    }
 }
