@@ -7,6 +7,7 @@ import com.biznopay.v1.domain.exception.MissingRequiredFieldException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 public class Payment {
     public static final String ENTITY_NAME = "Payment";
@@ -46,6 +47,13 @@ public class Payment {
         return new Payment(PaymentId.newId(), idempotencyKey, amountInCents, "MZN", description, PaymentStatus.PENDING,
                 paymentMethodDetails, Optional.empty(), Optional.empty(), 0, now, now
         );
+    }
+
+    public static Payment with(UUID uuid, String idempotencyKey, Long amountInCents, String currency, String description,
+                               PaymentStatus status, PaymentMethodDetails paymentMethodDetails, Optional<String> providerPaymentId,
+                               Optional<String> failureReason, int retryCount, LocalDateTime createdAt, LocalDateTime updatedAt){
+        PaymentId id = new PaymentId(uuid);
+        return new Payment(id, idempotencyKey, amountInCents, currency, description, status, paymentMethodDetails, providerPaymentId, failureReason, retryCount, createdAt, updatedAt);
     }
 
     //VALIDATIONS

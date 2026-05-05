@@ -2,8 +2,8 @@ package com.biznopay.v1.usecase.payment.create;
 
 import com.biznopay.v1.domain.entity.payment.Payment;
 import com.biznopay.v1.domain.exception.ServiceUnavailableException;
+import com.biznopay.v1.domain.gateway.PaymentProviderGateway;
 import com.biznopay.v1.domain.repository.PaymentRepository;
-import com.biznopay.v1.gateway.PaymentProviderGateway;
 import com.biznopay.v1.mocks.Mocks;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
