@@ -48,9 +48,9 @@ public class Payment {
     }
 
     //VALIDATIONS
-    private String validateIdempotencyKey(String idempotencyKey){
+    private String validateIdempotencyKey(String idempotencyKey) {
         if (idempotencyKey == null || idempotencyKey.isBlank())
-            throw new MissingRequiredFieldException("idempotencyKey",ENTITY_NAME);
+            throw new MissingRequiredFieldException("idempotencyKey", ENTITY_NAME);
         return idempotencyKey;
     }
 

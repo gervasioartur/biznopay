@@ -5,7 +5,7 @@ import com.biznopay.v1.domain.enums.PaymentMethodType;
 public class MpesaPaymentDetails extends PaymentMethodDetails {
     private final String phoneNumber;
 
-    private  MpesaPaymentDetails(String phoneNumber) {
+    private MpesaPaymentDetails(String phoneNumber) {
         super(PaymentMethodType.MPESA);
         this.phoneNumber = phoneNumber;
     }
