@@ -80,9 +80,10 @@ public class PaymentTest {
     @Test
     public void ShouldBuildPaymentWithCorrectValues(){
         Payment payment = Mocks.pendingPaymentMock();
+        LocalDateTime createdAtAndUpdatedAt = LocalDateTime.now();
         payment = Payment.with(payment.getId().value(), payment.getIdempotencyKey(), payment.getAmountInCents(),
                 payment.getCurrency(), payment.getDescription(), payment.getStatus(), payment.getPaymentMethodDetails(), Optional.empty(),
-                Optional.empty(), 0, LocalDateTime.now(), LocalDateTime.now());
+                Optional.empty(), 0, createdAtAndUpdatedAt, createdAtAndUpdatedAt);
 
         Assertions.assertNotNull(payment.getId());
         Assertions.assertEquals(Mocks.pendingPaymentMock().getIdempotencyKey(), payment.getIdempotencyKey());
@@ -97,6 +98,8 @@ public class PaymentTest {
         Assertions.assertEquals(Mocks.pendingPaymentMock().getFailureReason(), payment.getFailureReason());
         Assertions.assertEquals(Mocks.pendingPaymentMock().getRetryCount(), payment.getRetryCount());
         Assertions.assertEquals(Mocks.pendingPaymentMock().canRetry(), payment.canRetry());
+        Assertions.assertEquals(Mocks.pendingPaymentMock().getCreatedAt(), createdAtAndUpdatedAt);
+        Assertions.assertEquals(Mocks.pendingPaymentMock().getUpdatedAt(), createdAtAndUpdatedAt);
     }
 
     @Test
