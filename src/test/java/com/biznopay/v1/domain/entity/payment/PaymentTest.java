@@ -73,4 +73,14 @@ public class PaymentTest {
         payment = payment.markAsProcessing();
         Assertions.assertEquals(PaymentStatus.PROCESSING, payment.getStatus());
     }
+
+    @Test
+    public void ShouldMarkPaymentAsCompleted(){
+        Payment payment = Payment.create(PaymentMocks.paymentMock().getIdempotencyKey(),
+                PaymentMocks.paymentMock().getAmountInCents(), PaymentMocks.paymentMock().getDescription(),
+                PaymentMocks.paymentMock().getPaymentMethodDetails());
+        String providerPaymentId = "any_provider_payment_id";
+        payment = payment.markAsCompleted(providerPaymentId);
+        Assertions.assertEquals(PaymentStatus.COMPLETED, payment.getStatus());
+    }
 }
