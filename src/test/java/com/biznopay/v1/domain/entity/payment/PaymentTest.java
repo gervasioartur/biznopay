@@ -1,6 +1,7 @@
 package com.biznopay.v1.domain.entity.payment;
 
 import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
+import com.biznopay.v1.domain.enums.PaymentStatus;
 import com.biznopay.v1.domain.exception.InvalidAmountException;
 import com.biznopay.v1.domain.exception.MissingRequiredFieldException;
 import com.biznopay.v1.mocks.PaymentMocks;
@@ -62,5 +63,14 @@ public class PaymentTest {
         Assertions.assertEquals(PaymentMocks.paymentMock().getFailureReason(), payment.getFailureReason());
         Assertions.assertEquals(PaymentMocks.paymentMock().getRetryCount(), payment.getRetryCount());
         Assertions.assertEquals(PaymentMocks.paymentMock().canRetry(), payment.canRetry());
+    }
+
+    @Test
+    public  void ShouldMarkPaymentAsProcessing(){
+        Payment payment = Payment.create(PaymentMocks.paymentMock().getIdempotencyKey(),
+                PaymentMocks.paymentMock().getAmountInCents(), PaymentMocks.paymentMock().getDescription(),
+                PaymentMocks.paymentMock().getPaymentMethodDetails());
+        payment = payment.markAsProcessing();
+        Assertions.assertEquals(PaymentStatus.PROCESSING, payment.getStatus());
     }
 }
