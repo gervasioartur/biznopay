@@ -10,8 +10,6 @@ import java.util.Optional;
 
 public class Payment {
     public static final String ENTITY_NAME = "Payment";
-    public static final Long MIN_AMOUNT_IN_CENTS = 100L;
-    public static final Long MAX_AMOUNT_IN_CENTS = 7_500_000L;
 
     private final PaymentId id;
     private final String idempotencyKey;
@@ -31,7 +29,7 @@ public class Payment {
                     Optional<String> failureReason, int retryCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.idempotencyKey = this.validateIdempotencyKey(idempotencyKey);
-        this.amountInCents = this.validateAmountInCents(amountInCents);
+        this.amountInCents = this.validateAmountInCents(amountInCents, paymentMethodDetails);
         this.currency = currency;
         this.description = description;
         this.status = status;
@@ -57,11 +55,11 @@ public class Payment {
         return idempotencyKey;
     }
 
-    public Long validateAmountInCents(Long amountInCents) {
+    public Long validateAmountInCents(Long amountInCents, PaymentMethodDetails paymentMethodDetails) {
         if (amountInCents == null)
             throw new MissingRequiredFieldException("amountInCents", ENTITY_NAME);
-        if (amountInCents < MIN_AMOUNT_IN_CENTS || amountInCents > MAX_AMOUNT_IN_CENTS)
-            throw new InvalidAmountException();
+        if (amountInCents < paymentMethodDetails.getMinAmountInCents() || amountInCents > paymentMethodDetails.getMaxAmountInCents())
+            throw new InvalidAmountException(paymentMethodDetails.getMinAmountInCents(), paymentMethodDetails.getMaxAmountInCents());
         return amountInCents;
     }
 

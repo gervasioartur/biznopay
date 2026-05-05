@@ -12,4 +12,7 @@ public abstract class PaymentMethodDetails {
     public PaymentMethodType getType() {
         return this.type;
     }
+
+    public abstract Long getMinAmountInCents();
+    public abstract Long getMaxAmountInCents();
 }
