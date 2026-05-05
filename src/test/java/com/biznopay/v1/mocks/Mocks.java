@@ -16,6 +16,12 @@ public class Mocks {
         return Payment.create("any_idempotency_key", 100L, "any_description", paymentMethodDetails);
     }
 
+    public static Payment processingPaymentMock() {
+        Payment payment = pendingPaymentMock();
+        payment = payment.markAsProcessing();
+        return payment;
+    }
+
     public static Payment pendingPaymentMock(CreatePaymentInput input) {
         PaymentMethodDetails paymentMethodDetails = MpesaPaymentDetails.create("847272727");
         return Payment.create(input.idempotencyKey(), input.amountInCents(), input.description(), paymentMethodDetails);
