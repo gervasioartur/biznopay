@@ -1,6 +1,7 @@
 package com.biznopay.v1.domain.entity.paymentMethodDetails;
 
 import com.biznopay.v1.domain.enums.PaymentMethodType;
+import com.biznopay.v1.domain.exception.InvalidFieldException;
 import com.biznopay.v1.domain.exception.MissingRequiredFieldException;
 
 public class MpesaPaymentDetails extends PaymentMethodDetails {
@@ -19,11 +20,12 @@ public class MpesaPaymentDetails extends PaymentMethodDetails {
 
     //VALIDATIONS
     private String validatePhoneNumber(String phoneNumber) {
-        if (phoneNumber == null || phoneNumber.isEmpty())
-            throw new MissingRequiredFieldException("Phone number", "MpesaPaymentDetails");
+        if (phoneNumber == null || phoneNumber.isBlank())
+            throw new MissingRequiredFieldException("M-Pesa Phone number", "MpesaPaymentDetails");
+        if (!phoneNumber.matches("^(84|85)\\d{7}$"))
+            throw new InvalidFieldException("M-Pesa phone number","MpesaPaymentDetails");
         return phoneNumber;
     }
-
     //END VALIDATIONS
 
     public String getPhoneNumber() {
