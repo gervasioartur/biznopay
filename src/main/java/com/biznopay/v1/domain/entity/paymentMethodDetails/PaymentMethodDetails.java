@@ -13,6 +13,8 @@ public abstract class PaymentMethodDetails {
         return this.type;
     }
 
+    public abstract String getPhoneNumber();
+
     public abstract Long getMinAmountInCents();
 
     public abstract Long getMaxAmountInCents();

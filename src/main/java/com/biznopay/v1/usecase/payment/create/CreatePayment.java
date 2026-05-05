@@ -5,21 +5,21 @@ import com.biznopay.v1.domain.entity.paymentMethodDetails.MpesaPaymentDetails;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
 import com.biznopay.v1.domain.enums.PaymentStatus;
 import com.biznopay.v1.domain.exception.ServiceUnavailableException;
+import com.biznopay.v1.domain.gateway.PaymentGateway;
 import com.biznopay.v1.domain.gateway.PaymentProviderGateway;
-import com.biznopay.v1.domain.repository.PaymentRepository;
 
 public class CreatePayment {
 
-    private final PaymentRepository paymentRepository;
+    private final PaymentGateway paymentGateway;
     private final PaymentProviderGateway paymentProviderGateway;
 
-    public CreatePayment(PaymentRepository paymentRepository, PaymentProviderGateway paymentProviderGateway) {
-        this.paymentRepository = paymentRepository;
+    public CreatePayment(PaymentGateway paymentGateway, PaymentProviderGateway paymentProviderGateway) {
+        this.paymentGateway = paymentGateway;
         this.paymentProviderGateway = paymentProviderGateway;
     }
 
     public CreatePaymentOutput execute(CreatePaymentInput input) {
-        Payment payment = this.paymentRepository
+        Payment payment = this.paymentGateway
                 .findByIdempotencyKey(input.idempotencyKey())
                 .orElse(createAndPersisPayment(input));
 
@@ -35,7 +35,7 @@ public class CreatePayment {
     private Payment createAndPersisPayment(CreatePaymentInput input) {
         PaymentMethodDetails paymentMethodDetails = MpesaPaymentDetails.create(input.phoneNumber());
         Payment payment = Payment.create(input.idempotencyKey(), input.amountInCents(), input.description(), paymentMethodDetails);
-        return paymentRepository.save(payment);
+        return paymentGateway.save(payment);
     }
 
     private CreatePaymentOutput processWithRetry(Payment payment) {
@@ -43,24 +43,24 @@ public class CreatePayment {
         while (payment.canRetry()) {
             try {
                 payment = payment.markAsProcessing();
-                paymentRepository.save(payment);
+                paymentGateway.save(payment);
 
                 String providerPaymentId = paymentProviderGateway.submit(payment);
 
                 payment = payment.markAsCompleted(providerPaymentId);
-                paymentRepository.save(payment);
+                paymentGateway.save(payment);
 
                 return new CreatePaymentOutput(providerPaymentId);
 
             } catch (Exception e) {
                 errorMessage = e.getMessage();
                 payment = payment.incrementRetry();
-                paymentRepository.save(payment);
+                paymentGateway.save(payment);
             }
         }
 
         payment = payment.markAsFailed(errorMessage);
-        paymentRepository.save(payment);
+        paymentGateway.save(payment);
         throw new ServiceUnavailableException();
     }
 }
