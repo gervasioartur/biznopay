@@ -83,4 +83,14 @@ public class PaymentTest {
         payment = payment.markAsCompleted(providerPaymentId);
         Assertions.assertEquals(PaymentStatus.COMPLETED, payment.getStatus());
     }
+
+    @Test
+    public void ShouldMarkPaymentAsFailed(){
+        Payment payment = Payment.create(PaymentMocks.paymentMock().getIdempotencyKey(),
+                PaymentMocks.paymentMock().getAmountInCents(), PaymentMocks.paymentMock().getDescription(),
+                PaymentMocks.paymentMock().getPaymentMethodDetails());
+        String reason = "any_reason";
+        payment = payment.markAsFailed(reason);
+        Assertions.assertEquals(PaymentStatus.FAILED, payment.getStatus());
+    }
 }
