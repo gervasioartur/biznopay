@@ -33,7 +33,7 @@ public class Payment {
         this.currency = currency;
         this.description = description;
         this.status = status;
-        this.paymentMethodDetails = paymentMethodDetails;
+        this.paymentMethodDetails = this.validatePaymentMethodDetails(paymentMethodDetails);
         this.providerPaymentId = providerPaymentId;
         this.failureReason = failureReason;
         this.retryCount = retryCount;
@@ -55,12 +55,20 @@ public class Payment {
         return idempotencyKey;
     }
 
-    public Long validateAmountInCents(Long amountInCents, PaymentMethodDetails paymentMethodDetails) {
+    private Long validateAmountInCents(Long amountInCents, PaymentMethodDetails paymentMethodDetails) {
+        this.validatePaymentMethodDetails(paymentMethodDetails);
+
         if (amountInCents == null)
             throw new MissingRequiredFieldException("amountInCents", ENTITY_NAME);
         if (amountInCents < paymentMethodDetails.getMinAmountInCents() || amountInCents > paymentMethodDetails.getMaxAmountInCents())
             throw new InvalidAmountException(paymentMethodDetails.getMinAmountInCents(), paymentMethodDetails.getMaxAmountInCents());
         return amountInCents;
+    }
+
+    private PaymentMethodDetails validatePaymentMethodDetails(PaymentMethodDetails paymentMethodDetails) {
+        if (paymentMethodDetails == null)
+            throw new MissingRequiredFieldException("paymentMethodDetails", ENTITY_NAME);
+        return paymentMethodDetails;
     }
 
     //END VALIDATIONS
