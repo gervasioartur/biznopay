@@ -69,7 +69,7 @@ public class Mocks {
         return new CreatePaymentInput("any_idempotency_key", 100L, "any_description", "847272727", PaymentMethodType.MPESA);
     }
 
-    public  static PaymentJpaEntity paymentJpaEntityMock(Payment payment, PaymentMethodDetails paymentMethodDetails ){
+    public static PaymentJpaEntity paymentJpaEntityMock(Payment payment, PaymentMethodDetails paymentMethodDetails) {
         PaymentMethodDetailsJpaEntity paymentMethodDetailsJpaEntity = new PaymentMethodDetailsJpaEntity(paymentMethodDetails.getType(),
                 paymentMethodDetails.getPhoneNumber());
         return new PaymentJpaEntity(payment.getId().value(), payment.getIdempotencyKey(), payment.getAmountInCents(),

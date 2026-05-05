@@ -10,12 +10,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class PaymentMapperTests {
     @Test
-    public void ShouldReturnPendingMpesaDomainEntity(){
+    public void ShouldReturnPendingMpesaDomainEntity() {
         PaymentMapper paymentMapper = new PaymentMapper();
         Payment pendingPaymentMock = Mocks.pendingMpesaPaymentMock();
-        PaymentJpaEntity paymentJpaEntity = Mocks.paymentJpaEntityMock(pendingPaymentMock,pendingPaymentMock.getPaymentMethodDetails());
+        PaymentJpaEntity paymentJpaEntity = Mocks.paymentJpaEntityMock(pendingPaymentMock, pendingPaymentMock.getPaymentMethodDetails());
 
-        Payment payment =  PaymentMapper.toDomainEntity(paymentJpaEntity);
+        Payment payment = PaymentMapper.toDomainEntity(paymentJpaEntity);
 
         Assertions.assertEquals(paymentJpaEntity.getId(), payment.getId().value());
         Assertions.assertEquals(paymentJpaEntity.getIdempotencyKey(), payment.getIdempotencyKey());
@@ -32,11 +32,11 @@ public class PaymentMapperTests {
     }
 
     @Test
-    public void ShouldReturnFailedMkeshDomainEntity(){
+    public void ShouldReturnFailedMkeshDomainEntity() {
         Payment pendingPaymentMock = Mocks.failedMkeshPaymentMock();
-        PaymentJpaEntity paymentJpaEntity = Mocks.paymentJpaEntityMock(pendingPaymentMock,pendingPaymentMock.getPaymentMethodDetails());
+        PaymentJpaEntity paymentJpaEntity = Mocks.paymentJpaEntityMock(pendingPaymentMock, pendingPaymentMock.getPaymentMethodDetails());
 
-        Payment payment =  PaymentMapper.toDomainEntity(paymentJpaEntity);
+        Payment payment = PaymentMapper.toDomainEntity(paymentJpaEntity);
 
         Assertions.assertEquals(paymentJpaEntity.getId(), payment.getId().value());
         Assertions.assertEquals(paymentJpaEntity.getIdempotencyKey(), payment.getIdempotencyKey());
@@ -53,11 +53,11 @@ public class PaymentMapperTests {
     }
 
     @Test
-    public void ShouldReturnPendingEmolaDomainEntity(){
+    public void ShouldReturnPendingEmolaDomainEntity() {
         Payment pendingPaymentMock = Mocks.pendingEmolaPaymentMock();
-        PaymentJpaEntity paymentJpaEntity = Mocks.paymentJpaEntityMock(pendingPaymentMock,pendingPaymentMock.getPaymentMethodDetails());
+        PaymentJpaEntity paymentJpaEntity = Mocks.paymentJpaEntityMock(pendingPaymentMock, pendingPaymentMock.getPaymentMethodDetails());
 
-        Payment payment =  PaymentMapper.toDomainEntity(paymentJpaEntity);
+        Payment payment = PaymentMapper.toDomainEntity(paymentJpaEntity);
 
         Assertions.assertEquals(paymentJpaEntity.getId(), payment.getId().value());
         Assertions.assertEquals(paymentJpaEntity.getIdempotencyKey(), payment.getIdempotencyKey());

@@ -16,7 +16,7 @@ public class PaymentMapper {
         PaymentMethodDetails paymentMethodDetails = getDomainPaymentMethodType(paymentJpaEntity.getPaymentMethodDetails().getType(),
                 paymentJpaEntity.getPaymentMethodDetails().getPhoneNumber());
         Optional<String> providerPaymentId = paymentJpaEntity.getProviderPaymentId() == null ? Optional.empty() : Optional.of(paymentJpaEntity.getProviderPaymentId());
-        Optional<String> failureReason =  paymentJpaEntity.getFailureReason() ==  null ? Optional.empty() : Optional.of(paymentJpaEntity.getFailureReason());
+        Optional<String> failureReason = paymentJpaEntity.getFailureReason() == null ? Optional.empty() : Optional.of(paymentJpaEntity.getFailureReason());
 
         return Payment.with(paymentJpaEntity.getId(), paymentJpaEntity.getIdempotencyKey(), paymentJpaEntity.getAmountInCents(),
                 paymentJpaEntity.getCurrency(), paymentJpaEntity.getDescription(), paymentJpaEntity.getStatus(),

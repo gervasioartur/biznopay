@@ -20,7 +20,7 @@ public class PaymentGatewayImplTests {
     @Mock
     private PaymentJpaRepository paymentJpaRepository;
 
-    private PaymentGateway setUp(){
+    private PaymentGateway setUp() {
         return new PaymentGatewayImpl(paymentJpaRepository);
     }
 
@@ -29,7 +29,7 @@ public class PaymentGatewayImplTests {
         PaymentJpaEntity paymentJpaEntity = PaymentMapper.toJpaEntity(Mocks.completedMpesaPaymentMock());
         String idempotencyKey = paymentJpaEntity.getIdempotencyKey();
         Mockito.when(this.paymentJpaRepository.findByIdempotencyKey(idempotencyKey)).thenReturn(Optional.of(paymentJpaEntity));
-        PaymentGateway paymentGateway =  this.setUp();
+        PaymentGateway paymentGateway = this.setUp();
 
         Payment payment = paymentGateway.findByIdempotencyKey(idempotencyKey).get();
         Assertions.assertEquals(paymentJpaEntity.getId(), payment.getId().value());
@@ -51,7 +51,7 @@ public class PaymentGatewayImplTests {
         Payment payment = Mocks.completedMpesaPaymentMock();
         PaymentJpaEntity paymentJpaEntity = PaymentMapper.toJpaEntity(payment);
         Mockito.when(this.paymentJpaRepository.save(Mockito.any())).thenReturn(paymentJpaEntity);
-        PaymentGateway paymentGateway =  this.setUp();
+        PaymentGateway paymentGateway = this.setUp();
 
         Payment savedPayment = paymentGateway.save(payment);
 
