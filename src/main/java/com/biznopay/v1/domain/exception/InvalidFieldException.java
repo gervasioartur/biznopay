@@ -6,4 +6,8 @@ public class InvalidFieldException extends RuntimeException {
     public InvalidFieldException(String field, String entity) {
         super("The field " + field + " is invalid!");
     }
+
+    public String getCode() {
+        return CODE;
+    }
 }

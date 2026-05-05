@@ -1,4 +1,4 @@
-package com.biznopay.v1.infra.mapper;
+package com.biznopay.v1.infra.model.mapper;
 
 import com.biznopay.v1.domain.entity.payment.Payment;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.EmolaPaymentDetails;
@@ -6,8 +6,10 @@ import com.biznopay.v1.domain.entity.paymentMethodDetails.MkeshPaymentDetails;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.MpesaPaymentDetails;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
 import com.biznopay.v1.domain.enums.PaymentMethodType;
+import com.biznopay.v1.infra.model.dto.CreatePaymentRequest;
 import com.biznopay.v1.infra.persistence.jpa.entity.PaymentJpaEntity;
 import com.biznopay.v1.infra.persistence.jpa.entity.PaymentMethodDetailsJpaEntity;
+import com.biznopay.v1.usecase.payment.create.CreatePaymentInput;
 
 import java.util.Optional;
 
@@ -42,5 +44,9 @@ public class PaymentMapper {
                 payment.getCurrency(), payment.getDescription(), payment.getStatus(), paymentMethodDetailsJpaEntity,
                 payment.getProviderPaymentId().orElse(null), payment.getFailureReason().orElse(null), payment.getRetryCount(),
                 payment.getCreatedAt(), payment.getUpdatedAt());
+    }
+
+    public static CreatePaymentInput createPaymentInput(CreatePaymentRequest request){
+        return new CreatePaymentInput(request.idempotencyKey(), request.amountInCents(), request.description(), request.phoneNumber(), request.paymentMethod());
     }
 }

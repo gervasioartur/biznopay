@@ -2,7 +2,7 @@ package com.biznopay.v1.infra.gateway;
 
 import com.biznopay.v1.domain.entity.payment.Payment;
 import com.biznopay.v1.domain.gateway.PaymentGateway;
-import com.biznopay.v1.infra.mapper.PaymentMapper;
+import com.biznopay.v1.infra.model.mapper.PaymentMapper;
 import com.biznopay.v1.infra.persistence.jpa.entity.PaymentJpaEntity;
 import com.biznopay.v1.infra.persistence.jpa.repository.PaymentJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;

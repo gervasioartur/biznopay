@@ -1,8 +1,11 @@
 package com.biznopay.v1.usecase.payment.create;
 
 import com.biznopay.v1.domain.entity.payment.Payment;
+import com.biznopay.v1.domain.entity.paymentMethodDetails.EmolaPaymentDetails;
+import com.biznopay.v1.domain.entity.paymentMethodDetails.MkeshPaymentDetails;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.MpesaPaymentDetails;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
+import com.biznopay.v1.domain.enums.PaymentMethodType;
 import com.biznopay.v1.domain.enums.PaymentStatus;
 import com.biznopay.v1.domain.exception.ServiceUnavailableException;
 import com.biznopay.v1.domain.gateway.PaymentGateway;
@@ -33,7 +36,7 @@ public class CreatePayment {
     }
 
     private Payment createAndPersisPayment(CreatePaymentInput input) {
-        PaymentMethodDetails paymentMethodDetails = MpesaPaymentDetails.create(input.phoneNumber());
+        PaymentMethodDetails paymentMethodDetails =  this.getDomainPaymentMethodType(input.paymentMethod(), input.phoneNumber());
         Payment payment = Payment.create(input.idempotencyKey(), input.amountInCents(), input.description(), paymentMethodDetails);
         return paymentGateway.save(payment);
     }
@@ -62,5 +65,13 @@ public class CreatePayment {
         payment = payment.markAsFailed(errorMessage);
         paymentGateway.save(payment);
         throw new ServiceUnavailableException();
+    }
+
+    private PaymentMethodDetails getDomainPaymentMethodType(PaymentMethodType type, String phoneNumber) {
+        return switch (type) {
+            case MPESA -> MpesaPaymentDetails.create(phoneNumber);
+            case MKESH -> MkeshPaymentDetails.create(phoneNumber);
+            case EMOLA -> EmolaPaymentDetails.create(phoneNumber);
+        };
     }
 }

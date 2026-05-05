@@ -1,6 +1,7 @@
-package com.biznopay.v1.infra.mapper;
+package com.biznopay.v1.infra.model;
 
 import com.biznopay.v1.domain.entity.payment.Payment;
+import com.biznopay.v1.infra.model.mapper.PaymentMapper;
 import com.biznopay.v1.infra.persistence.jpa.entity.PaymentJpaEntity;
 import com.biznopay.v1.mocks.Mocks;
 import org.junit.jupiter.api.Assertions;
