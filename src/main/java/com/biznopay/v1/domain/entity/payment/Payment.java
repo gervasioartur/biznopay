@@ -2,6 +2,8 @@ package com.biznopay.v1.domain.entity.payment;
 
 import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
 import com.biznopay.v1.domain.enums.PaymentStatus;
+import com.biznopay.v1.domain.exception.InvalidAmountException;
+import com.biznopay.v1.domain.exception.InvalidFieldException;
 import com.biznopay.v1.domain.exception.MissingRequiredFieldException;
 
 import java.time.LocalDateTime;
@@ -9,6 +11,8 @@ import java.util.Optional;
 
 public class Payment {
     public static final String ENTITY_NAME = "Payment";
+    public static final Long MIN_AMOUNT_IN_CENTS = 100L;
+    public static final Long MAX_AMOUNT_IN_CENTS = 7_500_000L;
 
     private final PaymentId id;
     private final String idempotencyKey;
@@ -57,6 +61,8 @@ public class Payment {
     public Long validateAmountInCents(Long amountInCents) {
         if (amountInCents == null)
             throw new MissingRequiredFieldException("amountInCents", ENTITY_NAME);
+        if (amountInCents < MIN_AMOUNT_IN_CENTS || amountInCents > MAX_AMOUNT_IN_CENTS)
+            throw new InvalidAmountException();
         return amountInCents;
     }
 
