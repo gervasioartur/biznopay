@@ -1,4 +1,4 @@
-package com.biznopay.v1.gateway;
+package com.biznopay.v1.domain.gateway;
 
 import com.biznopay.v1.domain.entity.payment.Payment;
 
