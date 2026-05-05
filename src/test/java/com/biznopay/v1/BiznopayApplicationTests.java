@@ -10,4 +10,8 @@ class BiznopayApplicationTests {
     void contextLoads() {
     }
 
+    @Test
+    void mainMethodRuns() {
+        BiznopayApplication.main(new String[]{});
+    }
 }

@@ -28,16 +28,16 @@ public class CreatePaymentTests {
 
     @Test
     public void ShouldReturnServiceUnavailableAfterAllRetries() {
-        CreatePaymentInput input = Mocks.createPaymentInputMock();
-        Mockito.when(paymentGateway.findByIdempotencyKey(input.idempotencyKey())).thenReturn(Optional.of(Mocks.maximumRetriesPaymentMock()));
+        CreatePaymentInput input = Mocks.createMpesaPaymentInputMock();
+        Mockito.when(paymentGateway.findByIdempotencyKey(input.idempotencyKey())).thenReturn(Optional.of(Mocks.maximumRetriesMpesaPaymentMock()));
         CreatePayment createPayment = this.setUp();
         Assertions.assertThrows(ServiceUnavailableException.class, () -> createPayment.execute(input));
     }
 
     @Test
     public void ShouldReturnAPaymentIfPaymentIsCompleteAndItExistsOnFindByIdempotencyKey() {
-        CreatePaymentInput input = Mocks.createPaymentInputMock();
-        Payment payment = Mocks.completedPaymentMock();
+        CreatePaymentInput input = Mocks.createMpesaPaymentInputMock();
+        Payment payment = Mocks.completedMpesaPaymentMock();
         Mockito.when(paymentGateway.findByIdempotencyKey(input.idempotencyKey())).thenReturn(Optional.of(payment));
         CreatePayment createPayment = this.setUp();
         CreatePaymentOutput output = createPayment.execute(input);
@@ -47,8 +47,8 @@ public class CreatePaymentTests {
 
     @Test
     public void ShouldReturnAPaymentIfPaymentIsFailedAndItExistsOnFindByIdempotencyKey() {
-        CreatePaymentInput input = Mocks.createPaymentInputMock();
-        Payment payment = Mocks.failedPaymentMock();
+        CreatePaymentInput input = Mocks.createMpesaPaymentInputMock();
+        Payment payment = Mocks.failedMpesaPaymentMock();
         Mockito.when(paymentGateway.findByIdempotencyKey(input.idempotencyKey())).thenReturn(Optional.of(payment));
         CreatePayment createPayment = this.setUp();
         CreatePaymentOutput output = createPayment.execute(input);
@@ -58,8 +58,8 @@ public class CreatePaymentTests {
 
     @Test
     public void ShouldCompletePaymentAfterRetryOnTransientFailure() {
-        CreatePaymentInput input = Mocks.createPaymentInputMock();
-        Payment payment = Mocks.pendingPaymentMock(input);
+        CreatePaymentInput input = Mocks.createMpesaPaymentInputMock();
+        Payment payment = Mocks.pendingMpesaPaymentMock(input);
         Mockito.when(paymentGateway.findByIdempotencyKey(input.idempotencyKey())).thenReturn(Optional.empty());
         Mockito.when(paymentGateway.save(Mockito.any())).thenReturn(payment);
         Mockito.when(paymentProviderGateway.submit(Mockito.any())).thenThrow(new RuntimeException("gateway unavailable")).thenReturn("mpesa_txn_123");

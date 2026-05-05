@@ -12,7 +12,7 @@ public class MockMkeshProviderGatewayImplTests {
 
     @Test
     public void ShouldThrowRuntimeExceptionOnSubmitFailure() {
-        Payment payment = Mocks.processingPaymentMock();
+        Payment payment = Mocks.processingMpesaPaymentMock();
         MockMkeshProviderGatewayImpl gateway = new MockMkeshProviderGatewayImpl();
         assertThrows(RuntimeException.class, () -> gateway.submit(payment));
     }
