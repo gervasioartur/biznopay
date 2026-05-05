@@ -23,6 +23,9 @@ public class CreatePayment {
         if (payment.getStatus() == PaymentStatus.COMPLETED && payment.getProviderPaymentId().isPresent())
             return new CreatePaymentOutput(payment.getProviderPaymentId().get());
 
+        if (payment.getStatus() == PaymentStatus.FAILED)
+            return new CreatePaymentOutput(PaymentStatus.FAILED.name());
+
         if (!payment.canRetry()) {
             throw new ServiceUnavailableException();
         }

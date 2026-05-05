@@ -122,6 +122,17 @@ Feature: Create payment
     Then only one payment should be created
     And all responses should return the same payment
 
+  Scenario: Returning existing FAILED payment for same idempotency key
+    Given a payment already exists with idempotency-key "123abc" and status "FAILED"
+    When the user sends a POST request to "/api/v1/payments" with:
+      | amount          | 2000      |
+      | description     | Bill      |
+      | phone_number    | 841234567 |
+      | idempotency-key | 123abc    |
+    Then the system should return status code 200
+    And the response should contain the existing FAILED payment
+    And no new payment should be created
+
   Scenario: Payment is persisted as PENDING before being sent to M-Pesa
     When the user sends a POST request to "/api/v1/payments" with:
       | amount          | 2000      |
