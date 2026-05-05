@@ -4,7 +4,7 @@ import com.biznopay.v1.domain.exception.ServiceUnavailableException;
 
 public class CreatePayment {
 
-    public CreatePaymentOutput execute(CreatePaymentInput input){
+    public CreatePaymentOutput execute(CreatePaymentInput input) {
         throw new ServiceUnavailableException();
     }
 }

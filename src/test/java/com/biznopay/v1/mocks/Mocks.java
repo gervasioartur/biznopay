@@ -11,7 +11,7 @@ public class Mocks {
         return Payment.create("any_idempotency_key", 100L, "any_description", paymentMethodDetails);
     }
 
-    public static CreatePaymentInput createPaymentInputMock () {
+    public static CreatePaymentInput createPaymentInputMock() {
         return new CreatePaymentInput("any_idempotency_key", 100L, "any_description", "any_phone_number");
     }
 }

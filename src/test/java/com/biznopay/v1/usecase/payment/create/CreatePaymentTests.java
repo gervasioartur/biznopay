@@ -11,8 +11,8 @@ public class CreatePaymentTests {
 
     @Test
     public void ShouldReturnServiceUnavailableAfterAllRetries() {
-        CreatePaymentInput input =  Mocks.createPaymentInputMock();
-        CreatePayment createPayment =  new CreatePayment();
-        Assertions.assertThrows(ServiceUnavailableException.class,()-> createPayment.execute(input));
+        CreatePaymentInput input = Mocks.createPaymentInputMock();
+        CreatePayment createPayment = new CreatePayment();
+        Assertions.assertThrows(ServiceUnavailableException.class, () -> createPayment.execute(input));
     }
 }
