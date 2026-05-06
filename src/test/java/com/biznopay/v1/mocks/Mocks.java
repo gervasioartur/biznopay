@@ -12,6 +12,7 @@ import com.biznopay.v1.infra.persistence.jpa.entity.PaymentMethodDetailsJpaEntit
 import com.biznopay.v1.usecase.payment.create.CreatePaymentInput;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Mocks {
     public static final LocalDateTime FIXED_DATE_TIME = LocalDateTime.of(2026, 5, 5, 10, 0, 0);
@@ -103,7 +104,19 @@ public class Mocks {
 
 
     public static CreatePaymentRequest createMkeshPaymentRequestMock() {
-        return new CreatePaymentRequest("any_idempotency_key", 100L, "any_description", "837272727", PaymentMethodType.MKESH);
+        return new CreatePaymentRequest(UUID.randomUUID().toString(), 100L, "any_description", "837272727", PaymentMethodType.MKESH);
+    }
+
+    public static CreatePaymentRequest createMPesaPaymentRequestMock() {
+        return new CreatePaymentRequest("any_idempotency_key", 100L, "any_description", "847272727", PaymentMethodType.MPESA);
+    }
+
+    public static CreatePaymentRequest createMPesaPaymentRequestWithInvalidAmountMock() {
+        return new CreatePaymentRequest(UUID.randomUUID().toString(), 10L, "any_description", "847272727", PaymentMethodType.MPESA);
+    }
+
+    public static CreatePaymentRequest createMPesaPaymentRequestWithInvalidPhoneNumberMock() {
+        return new CreatePaymentRequest(UUID.randomUUID().toString(), 100L, "any_description", "887272727", PaymentMethodType.MPESA);
     }
 
     public static PaymentJpaEntity paymentJpaEntityMock(Payment payment, PaymentMethodDetails paymentMethodDetails) {

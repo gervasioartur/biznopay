@@ -29,7 +29,7 @@ public class PaymentController {
         CreatePaymentInput createPaymentInput = PaymentMapper.createPaymentInput(request);
         CreatePaymentOutput output = createPayment.execute(createPaymentInput);
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .body(FuncUtils.buildResponseBody(true, output, null));
     }
 }
