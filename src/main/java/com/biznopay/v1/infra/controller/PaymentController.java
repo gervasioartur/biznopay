@@ -36,9 +36,10 @@ public class PaymentController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ApiResponse<Object>> create(@PathVariable("id") UUID paymentId ) {
+    public ResponseEntity<ApiResponse<Object>> create(@PathVariable("id") UUID paymentId) {
         PaymentResponse output = findPymentById.execute(paymentId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(FuncUtils.buildResponseBody(true, output, null));
-    }}
+    }
+}
