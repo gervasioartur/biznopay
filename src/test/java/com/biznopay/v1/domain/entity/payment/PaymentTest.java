@@ -109,6 +109,7 @@ public class PaymentTest {
                 Mocks.pendingMpesaPaymentMock().getPaymentMethodDetails());
         payment = payment.markAsProcessing();
         Assertions.assertEquals(PaymentStatus.PROCESSING, payment.getStatus());
+        Assertions.assertTrue(payment.canRetry());
     }
 
     @Test
@@ -129,6 +130,7 @@ public class PaymentTest {
         String reason = "any_reason";
         payment = payment.markAsFailed(reason);
         Assertions.assertEquals(PaymentStatus.FAILED, payment.getStatus());
+        Assertions.assertFalse(payment.canRetry());
     }
 
     @Test
@@ -137,6 +139,11 @@ public class PaymentTest {
                 Mocks.pendingMpesaPaymentMock().getAmountInCents(), Mocks.pendingMpesaPaymentMock().getDescription(),
                 Mocks.pendingMpesaPaymentMock().getPaymentMethodDetails());
         payment = payment.incrementRetry();
-        Assertions.assertEquals(1, payment.getRetryCount());
+        payment = payment.incrementRetry();
+        payment = payment.incrementRetry();
+        payment = payment.incrementRetry();
+        Assertions.assertEquals(4, payment.getRetryCount());
+        Assertions.assertFalse(payment.canRetry());
+
     }
 }

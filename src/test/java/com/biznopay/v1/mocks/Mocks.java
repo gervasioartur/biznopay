@@ -20,14 +20,29 @@ public class Mocks {
         return Payment.create("any_idempotency_key", 100L, "any_description", paymentMethodDetails);
     }
 
+    public static Payment pendingMpesaPaymentMock(CreatePaymentInput input) {
+        PaymentMethodDetails paymentMethodDetails = MpesaPaymentDetails.create("847272727");
+        return Payment.create(input.idempotencyKey(), input.amountInCents(), input.description(), paymentMethodDetails);
+    }
+
     public static Payment pendingMkeshPaymentMock() {
         PaymentMethodDetails paymentMethodDetails = MkeshPaymentDetails.create("837272727");
         return Payment.create("any_idempotency_key", 100L, "any_description", paymentMethodDetails);
     }
 
+    public static Payment pendingMkeshPaymentMock(CreatePaymentInput input) {
+        PaymentMethodDetails paymentMethodDetails = EmolaPaymentDetails.create("877272727");
+        return Payment.create(input.idempotencyKey(), input.amountInCents(), input.description(), paymentMethodDetails);
+    }
+
     public static Payment pendingEmolaPaymentMock() {
         PaymentMethodDetails paymentMethodDetails = EmolaPaymentDetails.create("877272727");
         return Payment.create("any_idempotency_key", 100L, "any_description", paymentMethodDetails);
+    }
+
+    public static Payment pendingEmolaPaymentMock(CreatePaymentInput input) {
+        PaymentMethodDetails paymentMethodDetails = EmolaPaymentDetails.create("877272727");
+        return Payment.create(input.idempotencyKey(), input.amountInCents(), input.description(), paymentMethodDetails);
     }
 
     public static Payment processingMpesaPaymentMock() {
@@ -36,14 +51,22 @@ public class Mocks {
         return payment;
     }
 
-    public static Payment pendingMpesaPaymentMock(CreatePaymentInput input) {
-        PaymentMethodDetails paymentMethodDetails = MpesaPaymentDetails.create("847272727");
-        return Payment.create(input.idempotencyKey(), input.amountInCents(), input.description(), paymentMethodDetails);
-    }
 
     public static Payment maximumRetriesMpesaPaymentMock() {
         Payment payment = pendingMpesaPaymentMock();
-        for (int i = 0; i <= 2; i++) payment = payment.incrementRetry();
+        for (int i = 0; i <= 3; i++) payment = payment.incrementRetry();
+        return payment;
+    }
+
+    public static Payment maximumRetriesMkeshPaymentMock() {
+        Payment payment = pendingMkeshPaymentMock();
+        for (int i = 0; i <= 3; i++) payment = payment.incrementRetry();
+        return payment;
+    }
+
+    public static Payment maximumRetriesEmolaPaymentMock() {
+        Payment payment = pendingEmolaPaymentMock();
+        for (int i = 0; i <= 3; i++) payment = payment.incrementRetry();
         return payment;
     }
 
@@ -67,6 +90,14 @@ public class Mocks {
 
     public static CreatePaymentInput createMpesaPaymentInputMock() {
         return new CreatePaymentInput("any_idempotency_key", 100L, "any_description", "847272727", PaymentMethodType.MPESA);
+    }
+
+    public static CreatePaymentInput createMkeshPaymentInputMock() {
+        return new CreatePaymentInput("any_idempotency_key", 100L, "any_description", "837272727", PaymentMethodType.MKESH);
+    }
+
+    public static CreatePaymentInput createEmolPaymentInputMock() {
+        return new CreatePaymentInput("any_idempotency_key", 100L, "any_description", "877272727", PaymentMethodType.EMOLA);
     }
 
     public static PaymentJpaEntity paymentJpaEntityMock(Payment payment, PaymentMethodDetails paymentMethodDetails) {
