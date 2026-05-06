@@ -66,7 +66,7 @@ public class CreatePayment {
 
         payment = payment.markAsFailed(errorMessage);
         paymentGateway.save(payment);
-        throw new ServiceUnavailableException();
+        throw new ServiceUnavailableException(payment.getId().value());
     }
 
     private PaymentMethodDetails getDomainPaymentMethodType(PaymentMethodType type, String phoneNumber) {
