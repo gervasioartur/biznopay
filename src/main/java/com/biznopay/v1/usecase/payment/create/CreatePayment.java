@@ -28,10 +28,10 @@ public class CreatePayment {
                 .orElseGet(() -> createAndPersisPayment(input));
 
         if (payment.getStatus() == PaymentStatus.COMPLETED && payment.getProviderPaymentId().isPresent())
-            return new CreatePaymentOutput(payment.getProviderPaymentId().get());
+            return new CreatePaymentOutput(payment.getProviderPaymentId().get(), payment.getId().value());
 
         if (payment.getStatus() == PaymentStatus.FAILED)
-            return new CreatePaymentOutput("Payment  failed");
+            return new CreatePaymentOutput("Payment  failed", payment.getId().value());
 
         return processWithRetry(payment);
     }
@@ -55,7 +55,7 @@ public class CreatePayment {
                 payment = payment.markAsCompleted(providerPaymentId);
                 paymentGateway.save(payment);
 
-                return new CreatePaymentOutput(providerPaymentId);
+                return new CreatePaymentOutput(providerPaymentId, payment.getId().value());
 
             } catch (Exception e) {
                 errorMessage = e.getMessage();
