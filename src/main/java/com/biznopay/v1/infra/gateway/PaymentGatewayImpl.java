@@ -35,6 +35,7 @@ public class PaymentGatewayImpl implements PaymentGateway {
 
     @Override
     public Optional<Payment> findById(UUID paymentId) {
-        return Optional.empty();
+        Optional<PaymentJpaEntity> entity =  paymentJpaRepository.findById(paymentId);
+        return entity.map(PaymentMapper::toDomainEntity);
     }
 }
