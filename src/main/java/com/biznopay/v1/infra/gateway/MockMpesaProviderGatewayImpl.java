@@ -9,14 +9,26 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class MockMpesaProviderGatewayImpl implements PaymentProviderGateway {
-
     private final AtomicInteger attemptCount = new AtomicInteger(0);
 
     @Override
     public String submit(Payment payment) {
         int attempt = attemptCount.incrementAndGet();
-        if (attempt < 3) throw new RuntimeException("mpesa gateway unavailable - attempt " + attempt);
+
+        if (attempt < 3)
+            throw new RuntimeException("mpesa unavailable - attempt " + attempt);
+
         attemptCount.set(0);
-        return UUID.randomUUID().toString();
+
+        return "mpesa_session_" + UUID.randomUUID();
+    }
+
+    @Override
+    public boolean validateWebhookSignature(String payload, String signature) {
+        return true;
+    }
+
+    public void reset() {
+        attemptCount.set(0);
     }
 }

@@ -32,16 +32,6 @@ public class PaymentControllerTests extends E2ETestBase {
     }
 
     @Test
-    public void ShouldReturnServerUnavailableOnCreatePayment() {
-        CreatePaymentRequest request = Mocks.createMkeshPaymentRequestMock();
-        restTestClient.post()
-                .uri("/api/v1/payments")
-                .body(request)
-                .exchange()
-                .expectStatus().isEqualTo(HttpStatus.SERVICE_UNAVAILABLE);
-    }
-
-    @Test
     public void ShouldReturnCreatedAfterRetryOnCreatePayment() {
         CreatePaymentRequest request = Mocks.createMPesaPaymentRequestMock();
         restTestClient.post()

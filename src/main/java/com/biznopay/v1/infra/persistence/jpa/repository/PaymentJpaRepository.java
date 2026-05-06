@@ -8,4 +8,6 @@ import java.util.UUID;
 
 public interface PaymentJpaRepository extends JpaRepository<PaymentJpaEntity, UUID> {
     Optional<PaymentJpaEntity> findByIdempotencyKey(String idempotencyKey);
+
+    Optional<PaymentJpaEntity> findByProviderPaymentId(String providerPaymentId);
 }

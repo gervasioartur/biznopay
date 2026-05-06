@@ -8,8 +8,14 @@ import java.util.UUID;
 
 @Component
 public class MockEmolaProviderGatewayImpl implements PaymentProviderGateway {
+
     @Override
     public String submit(Payment payment) {
-        return UUID.randomUUID().toString();
+        return "emola_session_" + UUID.randomUUID();
+    }
+
+    @Override
+    public boolean validateWebhookSignature(String payload, String signature) {
+        return true;
     }
 }

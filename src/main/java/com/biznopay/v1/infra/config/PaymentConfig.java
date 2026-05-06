@@ -2,6 +2,7 @@ package com.biznopay.v1.infra.config;
 
 import com.biznopay.v1.domain.gateway.PaymentGateway;
 import com.biznopay.v1.domain.gateway.PaymentProviderGatewayFactory;
+import com.biznopay.v1.domain.service.PaymentProcessor;
 import com.biznopay.v1.usecase.payment.create.CreatePayment;
 import com.biznopay.v1.usecase.payment.find.FindPymentById;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +13,12 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class PaymentConfig {
     private final PaymentGateway paymentGateway;
-    private final PaymentProviderGatewayFactory paymentProviderGatewayFactory;
+    private final PaymentProviderGatewayFactory providerFactory;
+    private final PaymentProcessor paymentProcessor;
 
     @Bean
     public CreatePayment createPayment() {
-        return new CreatePayment(paymentGateway, paymentProviderGatewayFactory);
+        return new CreatePayment(paymentGateway, providerFactory, paymentProcessor);
     }
 
     @Bean
