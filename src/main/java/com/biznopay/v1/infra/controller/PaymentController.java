@@ -12,12 +12,14 @@ import com.biznopay.v1.usecase.payment.find.PaymentResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @Tag(name = "Authentication")
@@ -28,8 +30,10 @@ public class PaymentController {
 
     @PostMapping
     public ResponseEntity<ApiResponse<Object>> create(@RequestBody @Valid CreatePaymentRequest request) {
+        log.info("Payment request received idempotencyKey={} provider={}", request.idempotencyKey(), request.paymentMethod());
         CreatePaymentInput createPaymentInput = PaymentMapper.createPaymentInput(request);
         CreatePaymentOutput output = createPayment.execute(createPaymentInput);
+        log.info("Payment processed paymentId={}", output.paymentId());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(FuncUtils.buildResponseBody(true, output, null));
