@@ -1,0 +1,13 @@
+services:
+  biznopaydb:
+    image: postgres:18.3-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: biznopay
+    ports:
+      - 5432:5432
+    volumes:
+      - /db/biznopay:/var/lib/postgresql
+volumes:
+  biznopay_data:
