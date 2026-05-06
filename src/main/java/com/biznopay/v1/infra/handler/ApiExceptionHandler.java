@@ -24,6 +24,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler()
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiResponse<Object>> handleDomain(DomainException exception) {
+        log.error("");
         ApiError error = new ApiError(exception.getCode(), exception.getMessage());
         return ResponseEntity.badRequest().body(FuncUtils.buildResponseBody(false, null, error));
     }
@@ -31,6 +32,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler()
     @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
     public ResponseEntity<ApiResponse<Object>> handleDomain(InvalidAmountException exception) {
+        log.warn("Invalid amount");
         ApiError error = new ApiError(exception.getCode(), exception.getMessage());
         return ResponseEntity.unprocessableContent().body(FuncUtils.buildResponseBody(false, null, error));
     }
@@ -65,6 +67,7 @@ public class ApiExceptionHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public ResponseEntity<ApiResponse<Object>> handleServiceUnavailable(ServiceUnavailableException exception) {
+        log.error("Payment service unavailable");
         ApiError error = new ApiError(exception.getCode(), exception.getMessage());
         return new ResponseEntity<>(FuncUtils.buildResponseBody(false, null, error), HttpStatus.SERVICE_UNAVAILABLE);
     }
