@@ -49,7 +49,7 @@ public class Mocks {
 
     public static Payment processingMpesaPaymentMock() {
         Payment payment = pendingMpesaPaymentMock();
-        payment = payment.markAsProcessing();
+        payment = payment.markAsProcessing("any_provider_payment_id");
         return payment;
     }
 

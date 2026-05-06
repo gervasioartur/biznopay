@@ -81,9 +81,10 @@ public class Payment {
     }
     //END VALIDATIONS
 
-    public Payment markAsProcessing() {
-        return new Payment(id, idempotencyKey, amountInCents, currency, description, PaymentStatus.PROCESSING,
-                paymentMethodDetails, providerPaymentId, failureReason,
+    public Payment markAsProcessing(String providerPaymentId) {
+        Optional<String> providerPaymentIdOptional = providerPaymentId == null ? Optional.empty() : Optional.of(providerPaymentId);
+        return new Payment(id, idempotencyKey, amountInCents, currency, description,
+                PaymentStatus.PROCESSING, paymentMethodDetails, providerPaymentIdOptional, failureReason,
                 retryCount, createdAt, LocalDateTime.now());
     }
 

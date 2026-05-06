@@ -107,7 +107,7 @@ public class PaymentTest {
         Payment payment = Payment.create(Mocks.pendingMpesaPaymentMock().getIdempotencyKey(),
                 Mocks.pendingMpesaPaymentMock().getAmountInCents(), Mocks.pendingMpesaPaymentMock().getDescription(),
                 Mocks.pendingMpesaPaymentMock().getPaymentMethodDetails());
-        payment = payment.markAsProcessing();
+        payment = payment.markAsProcessing("any_provider_payment_id");
         Assertions.assertEquals(PaymentStatus.PROCESSING, payment.getStatus());
         Assertions.assertTrue(payment.canRetry());
     }

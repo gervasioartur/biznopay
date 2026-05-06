@@ -7,66 +7,68 @@ import com.biznopay.v1.domain.entity.paymentMethodDetails.MpesaPaymentDetails;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
 import com.biznopay.v1.domain.enums.PaymentMethodType;
 import com.biznopay.v1.domain.enums.PaymentStatus;
-import com.biznopay.v1.domain.exception.ServiceUnavailableException;
 import com.biznopay.v1.domain.gateway.PaymentGateway;
 import com.biznopay.v1.domain.gateway.PaymentProviderGateway;
 import com.biznopay.v1.domain.gateway.PaymentProviderGatewayFactory;
+import com.biznopay.v1.domain.service.PaymentProcessor;
+
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class CreatePayment {
-
     private final PaymentGateway paymentGateway;
-    private final PaymentProviderGatewayFactory paymentProviderGatewayFactory;
+    private final PaymentProviderGatewayFactory providerFactory;
+    private final PaymentProcessor paymentProcessor;
 
-    public CreatePayment(PaymentGateway paymentGateway, PaymentProviderGatewayFactory paymentProviderGatewayFactory) {
+    public CreatePayment(PaymentGateway paymentGateway, PaymentProviderGatewayFactory providerFactory, PaymentProcessor paymentProcessor) {
         this.paymentGateway = paymentGateway;
-        this.paymentProviderGatewayFactory = paymentProviderGatewayFactory;
+        this.providerFactory = providerFactory;
+        this.paymentProcessor = paymentProcessor;
     }
 
     public CreatePaymentOutput execute(CreatePaymentInput input) {
         Payment payment = this.paymentGateway
                 .findByIdempotencyKey(input.idempotencyKey())
-                .orElseGet(() -> createAndPersisPayment(input));
+                .orElseGet(() -> createAndPersistPayment(input));
 
         if (payment.getStatus() == PaymentStatus.COMPLETED && payment.getProviderPaymentId().isPresent())
             return new CreatePaymentOutput(payment.getProviderPaymentId().get(), payment.getId().value());
 
         if (payment.getStatus() == PaymentStatus.FAILED)
-            return new CreatePaymentOutput("Payment  failed", payment.getId().value());
+            return new CreatePaymentOutput("Payment failed", payment.getId().value());
 
-        return processWithRetry(payment);
+        if (payment.getStatus() == PaymentStatus.PROCESSING)
+            return new CreatePaymentOutput("Payment is being processed", payment.getId().value());
+
+        return submitWithTimeout(payment);
     }
 
-    private Payment createAndPersisPayment(CreatePaymentInput input) {
-        PaymentMethodDetails paymentMethodDetails = this.getDomainPaymentMethodType(input.paymentMethod(), input.phoneNumber());
-        Payment payment = Payment.create(input.idempotencyKey(), input.amountInCents(), input.description(), paymentMethodDetails);
-        return paymentGateway.save(payment);
-    }
-
-    private CreatePaymentOutput processWithRetry(Payment payment) {
-        String errorMessage = "";
-        while (payment.canRetry()) {
-            try {
-                payment = payment.markAsProcessing();
-                paymentGateway.save(payment);
-
-                PaymentProviderGateway provider = this.paymentProviderGatewayFactory.getProvider(payment.getPaymentMethodDetails().getType());
-                String providerPaymentId = provider.submit(payment);
-
-                payment = payment.markAsCompleted(providerPaymentId);
-                paymentGateway.save(payment);
-
-                return new CreatePaymentOutput(providerPaymentId, payment.getId().value());
-
-            } catch (Exception e) {
-                errorMessage = e.getMessage();
-                payment = payment.incrementRetry();
-                paymentGateway.save(payment);
-            }
+    private CreatePaymentOutput submitWithTimeout(Payment payment) {
+        try {
+            PaymentProviderGateway provider = providerFactory.getProvider(payment.getPaymentMethodDetails().getType());
+            Payment finalPayment = payment;
+            CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> provider.submit(finalPayment));
+            String conversationId = future.get(3, TimeUnit.SECONDS);
+            payment = payment.markAsProcessing(conversationId);
+            paymentGateway.save(payment);
+            return new CreatePaymentOutput("Payment is being processed", payment.getId().value());
+        } catch (Exception e) {
+            payment = payment.markAsProcessing(null);
+            paymentGateway.save(payment);
+            paymentProcessor.processWithRetry(payment);
+            return new CreatePaymentOutput("Payment is being processed, we will notify you", payment.getId().value());
         }
+    }
 
-        payment = payment.markAsFailed(errorMessage);
-        paymentGateway.save(payment);
-        throw new ServiceUnavailableException(payment.getId().value());
+    private Payment createAndPersistPayment(CreatePaymentInput input) {
+        PaymentMethodDetails details = getDomainPaymentMethodType(input.paymentMethod(), input.phoneNumber());
+        Payment payment = Payment.create(
+                input.idempotencyKey(),
+                input.amountInCents(),
+                input.description(),
+                details
+        );
+        return paymentGateway.save(payment);
     }
 
     private PaymentMethodDetails getDomainPaymentMethodType(PaymentMethodType type, String phoneNumber) {

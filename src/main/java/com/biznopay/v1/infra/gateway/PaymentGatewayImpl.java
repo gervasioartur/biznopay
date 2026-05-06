@@ -38,4 +38,10 @@ public class PaymentGatewayImpl implements PaymentGateway {
         Optional<PaymentJpaEntity> entity = paymentJpaRepository.findById(paymentId);
         return entity.map(PaymentMapper::toDomainEntity);
     }
+
+    @Override
+    public Optional<Payment> findByProviderPaymentId(String providerPaymentId) {
+        Optional<PaymentJpaEntity> entity = paymentJpaRepository.findByProviderPaymentId(providerPaymentId);
+        return entity.map(PaymentMapper::toDomainEntity);
+    }
 }

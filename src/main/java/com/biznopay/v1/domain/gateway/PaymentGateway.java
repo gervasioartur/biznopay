@@ -11,4 +11,6 @@ public interface PaymentGateway {
     Payment save(Payment payment);
 
     Optional<Payment> findById(UUID paymentId);
+
+    Optional<Payment> findByProviderPaymentId(String providerPaymentId);
 }
