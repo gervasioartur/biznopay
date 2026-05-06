@@ -59,11 +59,10 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public ResponseEntity<ApiResponse<Object>> handleServiceUnavailable(ServiceUnavailableException exception) {
-        log.error(exception.getMessage(), Instant.now());
         ApiError error = new ApiError(exception.getCode(), exception.getCode());
-        return ResponseEntity.ok().body(FuncUtils.buildResponseBody(false, null, error));
+        return new ResponseEntity<>(FuncUtils.buildResponseBody(false, null, error), HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     @ExceptionHandler
