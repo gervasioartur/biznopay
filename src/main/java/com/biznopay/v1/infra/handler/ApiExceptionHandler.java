@@ -3,6 +3,7 @@ package com.biznopay.v1.infra.handler;
 import com.biznopay.v1.domain.exception.DomainException;
 import com.biznopay.v1.domain.exception.InvalidAmountException;
 import com.biznopay.v1.domain.exception.InvalidFieldException;
+import com.biznopay.v1.domain.exception.ServiceUnavailableException;
 import com.biznopay.v1.domain.vo.ApiError;
 import com.biznopay.v1.domain.vo.ApiResponse;
 import com.biznopay.v1.infra.util.FuncUtils;
@@ -26,21 +27,21 @@ public class ApiExceptionHandler {
     @ExceptionHandler()
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiResponse<Object>> handleDomain(DomainException exception) {
-        ApiError error = new ApiError(exception.getCode() , exception.getMessage());
+        ApiError error = new ApiError(exception.getCode(), exception.getMessage());
         return ResponseEntity.badRequest().body(FuncUtils.buildResponseBody(false, null, error));
     }
 
     @ExceptionHandler()
     @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
     public ResponseEntity<ApiResponse<Object>> handleDomain(InvalidAmountException exception) {
-        ApiError error = new ApiError(exception.getCode() , exception.getMessage());
+        ApiError error = new ApiError(exception.getCode(), exception.getMessage());
         return ResponseEntity.unprocessableContent().body(FuncUtils.buildResponseBody(false, null, error));
     }
 
     @ExceptionHandler()
     @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
     public ResponseEntity<ApiResponse<Object>> handleDomain(InvalidFieldException exception) {
-        ApiError error = new ApiError(exception.getCode() , exception.getMessage());
+        ApiError error = new ApiError(exception.getCode(), exception.getMessage());
         return ResponseEntity.unprocessableContent().body(FuncUtils.buildResponseBody(false, null, error));
     }
 
@@ -58,11 +59,19 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<ApiResponse<Object>> handleServiceUnavailable(ServiceUnavailableException exception) {
+        log.error(exception.getMessage(), Instant.now());
+        ApiError error = new ApiError(exception.getCode(), exception.getCode());
+        return ResponseEntity.ok().body(FuncUtils.buildResponseBody(false, null, error));
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ApiResponse<Object>> handleGeneric(Exception exception) {
         log.error(exception.getMessage(), Instant.now());
         exception.printStackTrace();
-        ApiError error = new ApiError("SeverError", "Unexpected Error");
+        ApiError error = new ApiError("InternalSeverError", "Unexpected Error! Please try again later.");
         return ResponseEntity.internalServerError().body(FuncUtils.buildResponseBody(false, null, error));
     }
 }
