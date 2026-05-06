@@ -13,6 +13,8 @@ public class FindPymentById {
     }
 
     public PaymentResponse execute(UUID paymentId) {
-         throw new ResourceNotFoundException("Payment");
+         return this.paymentGateway.findById(paymentId)
+                 .map(PaymentResponse::fromPayment)
+                 .orElseThrow(()-> new ResourceNotFoundException("Payment"));
     }
 }

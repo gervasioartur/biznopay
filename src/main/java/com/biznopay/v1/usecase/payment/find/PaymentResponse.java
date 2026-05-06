@@ -1,5 +1,6 @@
 package com.biznopay.v1.usecase.payment.find;
 
+import com.biznopay.v1.domain.entity.payment.Payment;
 import com.biznopay.v1.domain.entity.payment.PaymentId;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
 import com.biznopay.v1.domain.enums.PaymentStatus;
@@ -20,4 +21,9 @@ public record PaymentResponse(
          Optional<String> failureReason,
          LocalDateTime createdAt
 ) {
+    public static PaymentResponse fromPayment(Payment payment){
+         return new PaymentResponse(payment.getId().value(),payment.getIdempotencyKey(),payment.getAmountInCents(),
+                payment.getCurrency(),payment.getDescription(),payment.getStatus(),payment.getPaymentMethodDetails(),
+                payment.getProviderPaymentId(), payment.getFailureReason(),payment.getCreatedAt());
+    }
 }
