@@ -71,8 +71,8 @@ public class PaymentGatewayImplTests {
     }
 
     @Test
-    public void ShouldReturnOptionalOfEmptyIfPaymentDoesNotExistsOnFindById(){
-        UUID paymentId  = UUID.randomUUID();
+    public void ShouldReturnOptionalOfEmptyIfPaymentDoesNotExistsOnFindById() {
+        UUID paymentId = UUID.randomUUID();
         Mockito.when(this.paymentJpaRepository.findById(paymentId)).thenReturn(Optional.empty());
         PaymentGateway paymentGateway = this.setUp();
         Optional<Payment> payment = paymentGateway.findById(paymentId);
@@ -80,7 +80,7 @@ public class PaymentGatewayImplTests {
     }
 
     @Test
-    public void ShouldReturnPaymentIfExistsOnFindBy(){
+    public void ShouldReturnPaymentIfExistsOnFindBy() {
         Payment paymentMock = Mocks.completedMpesaPaymentMock();
         UUID paymentId = paymentMock.getId().value();
         Mockito.when(this.paymentJpaRepository.findById(paymentId)).thenReturn(Optional.of(PaymentMapper.toJpaEntity(paymentMock)));
