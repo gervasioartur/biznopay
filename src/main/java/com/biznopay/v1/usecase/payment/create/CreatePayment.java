@@ -10,21 +10,22 @@ import com.biznopay.v1.domain.enums.PaymentStatus;
 import com.biznopay.v1.domain.exception.ServiceUnavailableException;
 import com.biznopay.v1.domain.gateway.PaymentGateway;
 import com.biznopay.v1.domain.gateway.PaymentProviderGateway;
+import com.biznopay.v1.domain.gateway.PaymentProviderGatewayFactory;
 
 public class CreatePayment {
 
     private final PaymentGateway paymentGateway;
-    private final PaymentProviderGateway paymentProviderGateway;
+    private final PaymentProviderGatewayFactory paymentProviderGatewayFactory;
 
-    public CreatePayment(PaymentGateway paymentGateway, PaymentProviderGateway paymentProviderGateway) {
+    public CreatePayment(PaymentGateway paymentGateway, PaymentProviderGatewayFactory paymentProviderGatewayFactory) {
         this.paymentGateway = paymentGateway;
-        this.paymentProviderGateway = paymentProviderGateway;
+        this.paymentProviderGatewayFactory = paymentProviderGatewayFactory;
     }
 
     public CreatePaymentOutput execute(CreatePaymentInput input) {
         Payment payment = this.paymentGateway
                 .findByIdempotencyKey(input.idempotencyKey())
-                .orElse(createAndPersisPayment(input));
+                .orElseGet(() -> createAndPersisPayment(input));
 
         if (payment.getStatus() == PaymentStatus.COMPLETED && payment.getProviderPaymentId().isPresent())
             return new CreatePaymentOutput(payment.getProviderPaymentId().get());
@@ -36,7 +37,7 @@ public class CreatePayment {
     }
 
     private Payment createAndPersisPayment(CreatePaymentInput input) {
-        PaymentMethodDetails paymentMethodDetails =  this.getDomainPaymentMethodType(input.paymentMethod(), input.phoneNumber());
+        PaymentMethodDetails paymentMethodDetails = this.getDomainPaymentMethodType(input.paymentMethod(), input.phoneNumber());
         Payment payment = Payment.create(input.idempotencyKey(), input.amountInCents(), input.description(), paymentMethodDetails);
         return paymentGateway.save(payment);
     }
@@ -48,7 +49,8 @@ public class CreatePayment {
                 payment = payment.markAsProcessing();
                 paymentGateway.save(payment);
 
-                String providerPaymentId = paymentProviderGateway.submit(payment);
+                PaymentProviderGateway provider = this.paymentProviderGatewayFactory.getProvider(payment.getPaymentMethodDetails().getType());
+                String providerPaymentId = provider.submit(payment);
 
                 payment = payment.markAsCompleted(providerPaymentId);
                 paymentGateway.save(payment);
