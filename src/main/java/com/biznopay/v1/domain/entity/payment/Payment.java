@@ -106,7 +106,7 @@ public class Payment {
     }
 
     public boolean canRetry() {
-        return this.retryCount < 3 && this.status == PaymentStatus.PENDING || this.status == PaymentStatus.PROCESSING;
+        return this.retryCount <= 3 && (this.status == PaymentStatus.PENDING || this.status == PaymentStatus.PROCESSING);
     }
 
     public PaymentId getId() {
