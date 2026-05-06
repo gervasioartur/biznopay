@@ -4,6 +4,7 @@ import com.biznopay.v1.domain.entity.payment.Payment;
 import com.biznopay.v1.domain.exception.ServiceUnavailableException;
 import com.biznopay.v1.domain.gateway.PaymentGateway;
 import com.biznopay.v1.domain.gateway.PaymentProviderGateway;
+import com.biznopay.v1.domain.gateway.PaymentProviderGatewayFactory;
 import com.biznopay.v1.mocks.Mocks;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,9 +22,12 @@ public class CreatePaymentTests {
     private PaymentGateway paymentGateway;
     @Mock
     private PaymentProviderGateway paymentProviderGateway;
+    @Mock
+    private PaymentProviderGatewayFactory paymentProviderGatewayFactory;
+
 
     private CreatePayment setUp() {
-        return new CreatePayment(paymentGateway, paymentProviderGateway);
+        return new CreatePayment(paymentGateway, paymentProviderGatewayFactory);
     }
 
     @Test
@@ -62,6 +66,7 @@ public class CreatePaymentTests {
         Payment payment = Mocks.pendingMpesaPaymentMock(input);
         Mockito.when(paymentGateway.findByIdempotencyKey(input.idempotencyKey())).thenReturn(Optional.empty());
         Mockito.when(paymentGateway.save(Mockito.any())).thenReturn(payment);
+        Mockito.when(paymentProviderGatewayFactory.getProvider(payment.getPaymentMethodDetails().getType())).thenReturn(paymentProviderGateway);
         Mockito.when(paymentProviderGateway.submit(Mockito.any())).thenThrow(new RuntimeException("gateway unavailable")).thenReturn("mpesa_txn_123");
         CreatePayment createPayment = this.setUp();
         CreatePaymentOutput output = createPayment.execute(input);
