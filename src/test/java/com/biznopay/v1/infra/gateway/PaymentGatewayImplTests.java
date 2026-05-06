@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 public class PaymentGatewayImplTests {
@@ -67,5 +68,38 @@ public class PaymentGatewayImplTests {
         Assertions.assertEquals(paymentJpaEntity.getRetryCount(), savedPayment.getRetryCount());
         Assertions.assertEquals(paymentJpaEntity.getCreatedAt(), savedPayment.getCreatedAt());
         Assertions.assertEquals(paymentJpaEntity.getUpdatedAt(), savedPayment.getUpdatedAt());
+    }
+
+    @Test
+    public void ShouldReturnOptionalOfEmptyIfPaymentDoesNotExistsOnFindById() {
+        UUID paymentId = UUID.randomUUID();
+        Mockito.when(this.paymentJpaRepository.findById(paymentId)).thenReturn(Optional.empty());
+        PaymentGateway paymentGateway = this.setUp();
+        Optional<Payment> payment = paymentGateway.findById(paymentId);
+        Assertions.assertFalse(payment.isPresent());
+    }
+
+    @Test
+    public void ShouldReturnPaymentIfExistsOnFindBy() {
+        Payment paymentMock = Mocks.completedMpesaPaymentMock();
+        UUID paymentId = paymentMock.getId().value();
+        Mockito.when(this.paymentJpaRepository.findById(paymentId)).thenReturn(Optional.of(PaymentMapper.toJpaEntity(paymentMock)));
+
+        PaymentGateway paymentGateway = this.setUp();
+        Optional<Payment> payment = paymentGateway.findById(paymentId);
+
+        Assertions.assertTrue(payment.isPresent());
+        Assertions.assertEquals(paymentMock.getId().value(), payment.get().getId().value());
+        Assertions.assertEquals(paymentMock.getIdempotencyKey(), payment.get().getIdempotencyKey());
+        Assertions.assertEquals(paymentMock.getAmountInCents(), payment.get().getAmountInCents());
+        Assertions.assertEquals(paymentMock.getCurrency(), payment.get().getCurrency());
+        Assertions.assertEquals(paymentMock.getDescription(), payment.get().getDescription());
+        Assertions.assertEquals(paymentMock.getStatus(), payment.get().getStatus());
+        Assertions.assertEquals(paymentMock.getPaymentMethodDetails().getPhoneNumber(), payment.get().getPaymentMethodDetails().getPhoneNumber());
+        Assertions.assertEquals(paymentMock.getProviderPaymentId().orElse(null), payment.get().getProviderPaymentId().orElse(null));
+        Assertions.assertEquals(paymentMock.getFailureReason().orElse(null), payment.get().getFailureReason().orElse(null));
+        Assertions.assertEquals(paymentMock.getRetryCount(), payment.get().getRetryCount());
+        Assertions.assertEquals(paymentMock.getCreatedAt(), payment.get().getCreatedAt());
+        Assertions.assertEquals(paymentMock.getUpdatedAt(), payment.get().getUpdatedAt());
     }
 }

@@ -1,9 +1,6 @@
 package com.biznopay.v1.infra.handler;
 
-import com.biznopay.v1.domain.exception.DomainException;
-import com.biznopay.v1.domain.exception.InvalidAmountException;
-import com.biznopay.v1.domain.exception.InvalidFieldException;
-import com.biznopay.v1.domain.exception.ServiceUnavailableException;
+import com.biznopay.v1.domain.exception.*;
 import com.biznopay.v1.domain.vo.ApiError;
 import com.biznopay.v1.domain.vo.ApiResponse;
 import com.biznopay.v1.infra.util.FuncUtils;
@@ -59,9 +56,16 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<ApiResponse<Object>> handleResourceNotFound(ResourceNotFoundException exception) {
+        ApiError error = new ApiError(exception.getCode(), exception.getMessage());
+        return new ResponseEntity<>(FuncUtils.buildResponseBody(false, null, error), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public ResponseEntity<ApiResponse<Object>> handleServiceUnavailable(ServiceUnavailableException exception) {
-        ApiError error = new ApiError(exception.getCode(), exception.getCode());
+        ApiError error = new ApiError(exception.getCode(), exception.getMessage());
         return new ResponseEntity<>(FuncUtils.buildResponseBody(false, null, error), HttpStatus.SERVICE_UNAVAILABLE);
     }
 

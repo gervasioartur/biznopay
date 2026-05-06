@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Component
 public class PaymentGatewayImpl implements PaymentGateway {
@@ -30,5 +31,11 @@ public class PaymentGatewayImpl implements PaymentGateway {
         PaymentJpaEntity paymentJpaEntity = PaymentMapper.toJpaEntity(payment);
         paymentJpaEntity = paymentJpaRepository.save(paymentJpaEntity);
         return PaymentMapper.toDomainEntity(paymentJpaEntity);
+    }
+
+    @Override
+    public Optional<Payment> findById(UUID paymentId) {
+        Optional<PaymentJpaEntity> entity = paymentJpaRepository.findById(paymentId);
+        return entity.map(PaymentMapper::toDomainEntity);
     }
 }
