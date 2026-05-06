@@ -46,7 +46,7 @@ public class PaymentMapper {
                 payment.getCreatedAt(), payment.getUpdatedAt());
     }
 
-    public static CreatePaymentInput createPaymentInput(CreatePaymentRequest request){
+    public static CreatePaymentInput createPaymentInput(CreatePaymentRequest request) {
         return new CreatePaymentInput(request.idempotencyKey(), request.amountInCents(), request.description(), request.phoneNumber(), request.paymentMethod());
     }
 }
