@@ -14,6 +14,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 public class PaymentGatewayImplTests {
@@ -67,5 +68,14 @@ public class PaymentGatewayImplTests {
         Assertions.assertEquals(paymentJpaEntity.getRetryCount(), savedPayment.getRetryCount());
         Assertions.assertEquals(paymentJpaEntity.getCreatedAt(), savedPayment.getCreatedAt());
         Assertions.assertEquals(paymentJpaEntity.getUpdatedAt(), savedPayment.getUpdatedAt());
+    }
+
+    @Test
+    public void ShouldReturnOptionalOfEmptyIfPaymentDoesNotExistsOnFindById(){
+        UUID paymentId  = UUID.randomUUID();
+//        Mockito.when(this.paymentJpaRepository.findById(paymentId)).thenReturn(Optional.empty());
+        PaymentGateway paymentGateway = this.setUp();
+        Optional<Payment> payment = paymentGateway.findById(paymentId);
+        Assertions.assertFalse(payment.isPresent());
     }
 }
