@@ -6,6 +6,7 @@ import com.biznopay.v1.domain.entity.paymentMethodDetails.MkeshPaymentDetails;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.MpesaPaymentDetails;
 import com.biznopay.v1.domain.entity.paymentMethodDetails.PaymentMethodDetails;
 import com.biznopay.v1.domain.enums.PaymentMethodType;
+import com.biznopay.v1.infra.model.dto.CreatePaymentRequest;
 import com.biznopay.v1.infra.persistence.jpa.entity.PaymentJpaEntity;
 import com.biznopay.v1.infra.persistence.jpa.entity.PaymentMethodDetailsJpaEntity;
 import com.biznopay.v1.usecase.payment.create.CreatePaymentInput;
@@ -96,8 +97,13 @@ public class Mocks {
         return new CreatePaymentInput("any_idempotency_key", 100L, "any_description", "837272727", PaymentMethodType.MKESH);
     }
 
-    public static CreatePaymentInput createEmolPaymentInputMock() {
+    public static CreatePaymentInput createEmolaPaymentInputMock() {
         return new CreatePaymentInput("any_idempotency_key", 100L, "any_description", "877272727", PaymentMethodType.EMOLA);
+    }
+
+
+    public static CreatePaymentRequest createMkeshPaymentRequestMock() {
+        return new CreatePaymentRequest("any_idempotency_key", 100L, "any_description", "837272727", PaymentMethodType.MKESH);
     }
 
     public static PaymentJpaEntity paymentJpaEntityMock(Payment payment, PaymentMethodDetails paymentMethodDetails) {

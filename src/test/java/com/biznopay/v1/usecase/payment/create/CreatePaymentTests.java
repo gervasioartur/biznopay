@@ -48,7 +48,7 @@ public class CreatePaymentTests {
 
     @Test
     public void ShouldReturnServiceUnavailableAfterAllRetriesEmola() {
-        CreatePaymentInput input = Mocks.createEmolPaymentInputMock();
+        CreatePaymentInput input = Mocks.createEmolaPaymentInputMock();
         Mockito.when(paymentGateway.findByIdempotencyKey(input.idempotencyKey())).thenReturn(Optional.of(Mocks.maximumRetriesEmolaPaymentMock()));
         CreatePayment createPayment = this.setUp();
         Assertions.assertThrows(ServiceUnavailableException.class, () -> createPayment.execute(input));
@@ -104,7 +104,7 @@ public class CreatePaymentTests {
 
     @Test
     public void ShouldCompletePaymentAfterRetryOnTransientFailureEmola() {
-        CreatePaymentInput input = Mocks.createEmolPaymentInputMock();
+        CreatePaymentInput input = Mocks.createEmolaPaymentInputMock();
         Payment payment = Mocks.pendingEmolaPaymentMock(input);
         Mockito.when(paymentGateway.findByIdempotencyKey(input.idempotencyKey())).thenReturn(Optional.empty());
         Mockito.when(paymentGateway.save(Mockito.any())).thenReturn(payment);
