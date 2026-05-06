@@ -1,9 +1,12 @@
 package com.biznopay.v1.infra.controller;
 
 import com.biznopay.v1.domain.enums.PaymentMethodType;
+import com.biznopay.v1.domain.vo.ApiResponse;
 import com.biznopay.v1.infra.model.dto.CreatePaymentRequest;
 import com.biznopay.v1.infra.util.FuncUtils;
 import com.biznopay.v1.mocks.Mocks;
+import com.biznopay.v1.usecase.payment.create.CreatePaymentOutput;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
@@ -98,5 +101,26 @@ public class PaymentControllerTests extends E2ETestBase {
                 .uri("/api/v1/payments/30fc0a6b-ab6e-422a-b248-9e5afa06a675")
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @Test
+    public void ShouldReturnPaymentResponseIfPaymentExistsOnFindById(){
+        CreatePaymentRequest request = Mocks.createMPesaPaymentRequestMock();
+
+        String responseBody = restTestClient.post()
+                .uri("/api/v1/payments")
+                .body(request)
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(String.class)
+                .returnResult()
+                .getResponseBody();
+
+        String paymentId = JsonPath.read(responseBody, "$.data.paymentId");
+
+        restTestClient.get()
+                .uri("/api/v1/payments/" + paymentId)
+                .exchange()
+                .expectStatus().isOk();
     }
 }
