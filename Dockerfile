@@ -9,4 +9,10 @@ FROM amazoncorretto:25-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8000
+
+ENV SPRING_PROFILES_ACTIVE=prod
+ENV DB_URL=""
+ENV DB_USERNAME=""
+ENV DB_PASSWORD=""
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
