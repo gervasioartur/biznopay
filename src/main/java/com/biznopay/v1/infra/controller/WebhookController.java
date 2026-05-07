@@ -29,8 +29,7 @@ public class WebhookController {
                 request.status(),
                 request.failureReason(),
                 request.rawPayload(),
-                signature,
-                request.providerType()
+                signature
         );
 
         handleWebhook.execute(input);
