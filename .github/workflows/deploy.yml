@@ -88,6 +88,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Copy manifest to VPS
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          source: "k8s/biznopay.yaml"
+          target: "~/k8s/"
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
         with:
