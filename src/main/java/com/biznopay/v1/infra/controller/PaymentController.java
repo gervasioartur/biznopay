@@ -22,7 +22,7 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "Authentication")
+@Tag(name = "Payments")
 @RequestMapping("/api/v1/payments")
 public class PaymentController {
     private final CreatePayment createPayment;

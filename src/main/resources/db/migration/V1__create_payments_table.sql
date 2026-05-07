@@ -6,7 +6,7 @@ CREATE TABLE T_PAYMENTS
     currency            VARCHAR(3)   NOT NULL DEFAULT 'MZN',
     description         VARCHAR(255) NOT NULL,
     status              VARCHAR(20)  NOT NULL,
-    type                VARCHAR(20) NOT NULL,
+    type                VARCHAR(20)  NOT NULL,
     phone_number        VARCHAR(20),
     provider_payment_id VARCHAR(255),
     failure_reason      TEXT,
