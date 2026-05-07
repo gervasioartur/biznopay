@@ -2,7 +2,7 @@ name: BiznoPay CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
   workflow_dispatch:
 
 jobs:
@@ -71,7 +71,6 @@ jobs:
             docker rm biznopay || true
             docker run -d \
               --name biznopay \
-              --network biznopay_network \
               -p 8000:8000 \
               -e SPRING_PROFILES_ACTIVE=prod \
               -e DB_URL=${{ secrets.DB_URL }} \
