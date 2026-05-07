@@ -1,6 +1,21 @@
 services:
+  biznopay:
+    build: .
+    ports:
+      - 8000:8000
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://biznopaydb:5432/biznopay
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      biznopaydb:
+        condition: service_healthy
+    networks:
+      - biznopay_network
+
   biznopaydb:
-    image: postgres:18.3-alpine
+    image: postgres:16-alpine
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -8,6 +23,18 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - /db/biznopay:/var/lib/postgresql
+      - biznopay_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - biznopay_network
+
 volumes:
   biznopay_data:
+
+networks:
+  biznopay_network:
+    driver: bridge
