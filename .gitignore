@@ -32,4 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 
-/k8s/local-secrets.yaml
+/k8s/local-biznopay.yaml
