@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: biznopay
-          image: gervasioartur/biznopay:latest
+          image: gervasioartur/biznopay:IMAGE_TAG
           ports:
             - containerPort: 8000
           envFrom:

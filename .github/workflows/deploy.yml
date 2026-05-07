@@ -101,10 +101,10 @@ jobs:
               --from-literal=SPRING_DATASOURCE_URL="${{ secrets.DB_URL }}" \
               --from-literal=SPRING_DATASOURCE_USERNAME="${{ secrets.DB_USERNAME }}" \
               --from-literal=SPRING_DATASOURCE_PASSWORD="${{ secrets.DB_PASSWORD }}" \
-              --from-literal=SERVER_URL="${{ secrets.SERVER_URL }}" \
+              --from-literal=SERVER_URL="${{ secrets.SERVER_URL_K8S }}" \
               --dry-run=client -o yaml | kubectl apply -f -
-            kubectl apply -f ~/k8s/manifest.yaml
+            kubectl apply -f ~/k8s/biznopay.yaml
             kubectl set image deployment/biznopay \
-              biznopay=gervasioartur/biznopay:latest \
-              -n biznopay
+            biznopay=${{ secrets.DOCKER_USERNAME }}/biznopay:${{ github.sha }} \
+            -n biznopay
             kubectl rollout status deployment/biznopay -n biznopay
