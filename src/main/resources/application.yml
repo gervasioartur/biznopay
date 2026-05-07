@@ -11,3 +11,14 @@ spring:
       hibernate:
         format_sql: false
         use_sql_comments: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
