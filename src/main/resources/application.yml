@@ -1,6 +1,6 @@
 server:
-  port: 8000
-  url: ${SERVER_URL:http://localhost:8000}
+  port: 8080
+  url: ${SERVER_URL:http://localhost:8080}
 
 spring:
   application:
