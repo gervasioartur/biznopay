@@ -47,7 +47,7 @@ Sistema de pagamentos resiliente para Moçambique com foco em baixa conectividad
 
 ### On-Premise — Docker
 ```
-http://138.128.240.137:8000/swagger-ui/index.html
+http://138.128.240.137:8080/swagger-ui/index.html
 ```
 
 ### On-Premise — Kubernetes (k3s)
