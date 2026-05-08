@@ -55,6 +55,11 @@ http://138.128.240.137:8080/swagger-ui/index.html
 http://138.128.240.137:30000/swagger-ui/index.html
 ```
 
+### Wolke Host
+```
+https://biznopay-5h93vsp.onwolke.app/swagger-ui/index.html#
+```
+
 ---
 
 ## Pré-requisitos
