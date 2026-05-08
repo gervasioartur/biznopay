@@ -8,7 +8,7 @@ RUN mvn clean package -DskipTests -q
 FROM amazoncorretto:25-alpine
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
-EXPOSE 8000
+EXPOSE 8080
 
 ENV SERVER_URL=""
 ENV SPRING_PROFILES_ACTIVE=prod
